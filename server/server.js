@@ -31,6 +31,7 @@ const contactRoutes = require('./routes/contactRoutes');
 
 // ─── Load Environment Variables ──────────────────────────────────────────────
 dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 // Connect to Database asynchronously
 connectDB();
@@ -161,6 +162,8 @@ if (fs.existsSync(clientDistPath)) {
 // ─── 404 & Error Handlers ────────────────────────────────────────────────────
 app.use(notFound);
 app.use(errorHandler);
+
+// Host & Port configuration
 
 const PORT = process.env.PORT || 5000;
 if (process.env.NODE_ENV !== 'test') {

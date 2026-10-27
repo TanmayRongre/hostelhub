@@ -12,7 +12,8 @@ let isConnected = false;
 
 const connectDB = async () => {
   const primaryUri = process.env.MONGO_URI || process.env.MONGODB_URI;
-  const fallbackUri = process.env.LOCAL_MONGO_URI || 'mongodb://127.0.0.1:27017/hackathon_db';
+  const fallbackUri =
+    process.env.LOCAL_MONGO_URI || 'mongodb://127.0.0.1:27017/hackathon_db';
 
   if (!primaryUri && !fallbackUri) {
     console.warn('⚠️ No MongoDB URI configured.');
