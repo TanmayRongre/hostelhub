@@ -14,7 +14,7 @@ export default function StatsSection() {
   const { ref: stripRef, inView: stripIn } = useInView({ threshold: 0.2 });
 
   return (
-    <section className="lp-section lp-bg-b">
+    <section id="impact" className="lp-section lp-bg-b">
       <div className="lp-inner">
         <div ref={headRef} className={`lp-header-center reveal ${headIn ? 'in-view' : ''}`} style={{ marginBottom: 48 }}>
           <div className="lp-tag">

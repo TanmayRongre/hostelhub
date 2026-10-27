@@ -33,11 +33,30 @@ const POLICY_CONTENT = {
 export default function Footer() {
   const [activeModal, setActiveModal] = useState(null);
 
-  const portalLinks = [
-    { label: 'Student Resident Portal', to: '/dashboard' },
-    { label: 'Warden Administrative Desk', to: '/warden' },
-    { label: 'Institutional Admin Command', to: '/admin' },
+  const navigationLinks = [
+    { label: 'Overview', hash: '#overview', to: '/#overview' },
+    { label: 'Portals & Roles', hash: '#roles-section', to: '/#roles-section' },
+    { label: 'System Capabilities', hash: '#capabilities', to: '/#capabilities' },
+    { label: 'Operational Workflow', hash: '#workflow', to: '/#workflow' },
+    { label: 'Campus Impact', hash: '#impact', to: '/#impact' },
+    { label: 'Office & Inquiries', to: '/contact' },
   ];
+
+  const handleNavScroll = (e, hash) => {
+    if (window.location.pathname === '/') {
+      e.preventDefault();
+      if (hash === '#overview') {
+        if (window.lenis) window.lenis.scrollTo(0, { duration: 1.1 });
+        else window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      const el = document.querySelector(hash);
+      if (el) {
+        if (window.lenis) window.lenis.scrollTo(el, { offset: -64, duration: 1.1 });
+        else el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   return (
     <footer className="site-footer">
@@ -104,13 +123,16 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Portals */}
+          {/* Navigation */}
           <div>
-            <div className="footer-col-title">Role Gateways</div>
+            <div className="footer-col-title">Navigation</div>
             <ul className="footer-links">
-              {portalLinks.map((l) => (
+              {navigationLinks.map((l) => (
                 <li key={l.label}>
-                  <Link to={l.to}>
+                  <Link
+                    to={l.to}
+                    onClick={(e) => l.hash && handleNavScroll(e, l.hash)}
+                  >
                     <ChevronRight className="w-3.5 h-3.5 text-[#dfba73]" />
                     <span>{l.label}</span>
                   </Link>

@@ -25,7 +25,7 @@ export default function HowItWorksSection() {
   const { ref: stepsRef, inView: stepsIn } = useInView({ threshold: 0.15 });
 
   return (
-    <section className="lp-section lp-bg-a">
+    <section id="workflow" className="lp-section lp-bg-a">
       <div className="lp-inner">
         <div ref={headRef} className={`lp-header-center reveal ${headIn ? 'in-view' : ''}`}>
           <div className="lp-tag">

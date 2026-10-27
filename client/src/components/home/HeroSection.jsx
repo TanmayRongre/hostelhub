@@ -14,7 +14,7 @@ import heroVideo from '../../assests/Video.mp4';
 
 export default function HeroSection() {
   return (
-    <div className="home-page">
+    <div id="overview" className="home-page">
       <video
         autoPlay
         loop

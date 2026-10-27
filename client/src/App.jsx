@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
+import SmoothScroll from './components/common/SmoothScroll';
 import Home from './pages/Home';
 import StudentDashboard from './pages/StudentDashboard';
 import WardenDashboard from './pages/WardenDashboard';
@@ -15,6 +16,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <SmoothScroll />
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#090b10', color: '#f1f3f7' }}>
           <Navbar />
           <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>

@@ -1,28 +1,27 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import useInView from '../../hooks/useInView';
-import {
-  GraduationCap,
-  Building2,
-  ShieldCheck,
-  Check,
-  ArrowRight,
-  Users
-} from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const ROLES = [
   {
+    id: 'student',
     cls: 'student',
-    iconCls: 'gold',
-    labelCls: 'gold',
-    icon: <GraduationCap className="w-5 h-5" />,
+    theme: 'gold',
+    stepNumber: '01',
+    code: 'RESIDENT.OS',
     label: 'Resident Portal',
     title: 'Student Resident',
-    desc: 'Empowering hostel residents with complete transparency — track room allotment, raise maintenance workorders, verify mess menus, and manage leaves digitally.',
+    tagline: 'Precision Resident Living',
+    desc: 'Empowering hostel residents with complete transparency through digital room allotments, maintenance requests, mess menus, and leave applications.',
+    accessLevel: 'TIER 01 // RESIDENT AUTH',
     features: [
       'Digital room allotment letter & key tracking',
       'Instant maintenance workorders with status audit',
-      'Daily curated nutritional mess menu schedules',
+      'Daily mess menu schedules',
       'Digital gate-pass & outstation leave applications',
       'Semester fee dues & official receipt archives',
       'Campus residence announcements & safety alerts',
@@ -31,38 +30,44 @@ const ROLES = [
     link: '/login',
   },
   {
+    id: 'warden',
     cls: 'warden',
-    iconCls: 'emerald',
-    labelCls: 'emerald',
-    icon: <Building2 className="w-5 h-5" />,
+    theme: 'emerald',
+    stepNumber: '02',
+    code: 'WARDEN.DESK',
     label: 'Residence Desk',
     title: 'Hostel Warden',
-    desc: 'Real-time operational command of your assigned residential block — approve outpasses, resolve grievances, audit QR attendance, and coordinate logistics.',
+    tagline: 'Block & Floor Operational Command',
+    desc: 'Manage hostel operations, approve outpasses, resolve grievances, monitor attendance, and coordinate maintenance.',
+    accessLevel: 'TIER 02 // SUPERVISORY DESK',
     features: [
-      'Comprehensive block-wise room & occupancy register',
-      'One-click outpass and multi-day leave authorizations',
+      'Block-wise room & occupancy register',
+      'Outpass and multi-day leave authorizations',
       'Priority ticket resolution & technician assignment',
       'Automated nightly QR attendance reconciliation',
-      'Block-specific notices & broadcast dispatches',
-      'Immediate infrastructure failure escalation to Admin',
+      'Block-specific notices & broadcasts',
+      'Infrastructure failure escalation to Admin',
     ],
     cta: 'Enter Warden Desk',
     link: '/login',
   },
   {
+    id: 'admin',
     cls: 'admin-r',
-    iconCls: 'slate',
-    labelCls: 'slate',
-    icon: <ShieldCheck className="w-5 h-5" />,
+    theme: 'cyan',
+    stepNumber: '03',
+    code: 'ADMIN.COMMAND',
     label: 'Institutional Command',
     title: 'Campus Administrator',
-    desc: 'Executive governance across the entire institutional residential ecosystem — multi-hostel allocation matrices, financial reconciliation, and warden controls.',
+    tagline: 'Institutional Governance & Audit',
+    desc: 'Oversee hostel allocation, financial reconciliation, warden access, and institution-wide residential policies.',
+    accessLevel: 'TIER 03 // ROOT GOVERNANCE',
     features: [
-      'Centralized block & floor configuration management',
-      'Warden credential provisioning and accountability audit',
-      'Institutional student residence directory & history',
+      'Centralized block & floor configuration',
+      'Warden credential provisioning and audit',
+      'Student residence directory & history',
       'Semester fee ledger & reconciliation analytics',
-      'Comprehensive downloadable PDF/CSV audit reports',
+      'Downloadable PDF/CSV audit reports',
       'Campus safety compliance & system-wide policies',
     ],
     cta: 'Enter Admin Hub',
@@ -71,52 +76,264 @@ const ROLES = [
 ];
 
 export default function RolesSection() {
-  const { ref: headRef, inView: headIn } = useInView();
-  const { ref: gridRef, inView: gridIn } = useInView({ threshold: 0.1 });
+  const sectionRef = useRef(null);
+  const card0Ref = useRef(null);
+  const card1Ref = useRef(null);
+  const card2Ref = useRef(null);
+  const [activeStep, setActiveStep] = useState(0);
+
+  const cardRefs = [card0Ref, card1Ref, card2Ref];
+
+  useGSAP(() => {
+    const cards = [card0Ref.current, card1Ref.current, card2Ref.current];
+    if (cards.some((card) => !card)) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    if (prefersReducedMotion) {
+      gsap.set(cards, {
+        clearProps: 'all',
+        position: 'relative',
+        y: 0,
+        opacity: 1,
+        scale: 1,
+      });
+      return;
+    }
+
+    // Helper: calculate distance from card resting top to below the viewport bottom
+    const getBottomOffset = (card) => {
+      if (!card) return window.innerHeight + 100;
+      const currentY = gsap.getProperty(card, 'y') || 0;
+      const restingTop = card.getBoundingClientRect().top - currentY;
+      return Math.max(window.innerHeight - restingTop + 40, window.innerHeight * 0.85);
+    };
+
+    // Set deterministic initial states
+    gsap.set(cards[0], {
+      y: 0,
+      scale: 1,
+      opacity: 1,
+      zIndex: 10,
+      transformOrigin: 'center top',
+    });
+
+    gsap.set(cards[1], {
+      y: () => getBottomOffset(cards[1]),
+      scale: 1,
+      opacity: 1,
+      zIndex: 20,
+      transformOrigin: 'center top',
+    });
+
+    gsap.set(cards[2], {
+      y: () => getBottomOffset(cards[2]),
+      scale: 1,
+      opacity: 1,
+      zIndex: 30,
+      transformOrigin: 'center top',
+    });
+
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        id: 'roles-pin',
+        trigger: sectionRef.current,
+        start: 'top 64px',
+        end: '+=200%',
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.8,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const p = self.progress;
+          const step = p < 0.36 ? 0 : p < 0.72 ? 1 : 2;
+          setActiveStep((prev) => (prev === step ? prev : step));
+        },
+      },
+    });
+
+    // 1. Hold Card 0 (Student Resident) initially in the card stage
+    timeline
+      .to({}, { duration: 0.3 })
+
+      // 2. Card 1 (Hostel Warden) slides up from the absolute bottom of the viewport
+      .fromTo(
+        cards[1],
+        { y: () => getBottomOffset(cards[1]) },
+        {
+          y: 0,
+          ease: 'power2.inOut',
+          duration: 1.0,
+        }
+      )
+      .to(
+        cards[0],
+        {
+          scale: 0.95,
+          y: -14,
+          opacity: 0.5,
+          ease: 'power2.inOut',
+          duration: 1.0,
+        },
+        '<'
+      )
+
+      // 3. Hold Card 1 in place for reading
+      .to({}, { duration: 0.3 })
+
+      // 4. Card 2 (Campus Administrator) slides up from the absolute bottom of the viewport
+      .fromTo(
+        cards[2],
+        { y: () => getBottomOffset(cards[2]) },
+        {
+          y: 0,
+          ease: 'power2.inOut',
+          duration: 1.0,
+        }
+      )
+      .to(
+        cards[1],
+        {
+          scale: 0.95,
+          y: -14,
+          opacity: 0.5,
+          ease: 'power2.inOut',
+          duration: 1.0,
+        },
+        '<'
+      )
+      .to(
+        cards[0],
+        {
+          scale: 0.90,
+          y: -26,
+          opacity: 0.2,
+          ease: 'power2.inOut',
+          duration: 1.0,
+        },
+        '<'
+      )
+
+      // 5. Hold Card 2 before unpinning
+      .to({}, { duration: 0.3 });
+
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  }, { scope: sectionRef });
+
+  const handlePillClick = (idx) => {
+    const trigger = ScrollTrigger.getById('roles-pin');
+    if (!trigger) return;
+
+    const targets = [0.1, 0.5, 0.9];
+    const targetProgress = targets[idx] ?? idx / 2;
+    const target = trigger.start + targetProgress * (trigger.end - trigger.start);
+
+    const reducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    window.scrollTo({
+      top: target,
+      behavior: reducedMotion ? 'auto' : 'smooth',
+    });
+  };
 
   return (
-    <section className="lp-section lp-bg-a">
-      <div className="lp-inner">
-        <div ref={headRef} className={`lp-header-center reveal ${headIn ? 'in-view' : ''}`}>
-          <div className="lp-tag">
-            <Users className="w-3.5 h-3.5 text-[#dfba73]" />
-            <span>Role-Scoped Architecture</span>
-          </div>
-          <h2 className="lp-heading">
-            Tailored Experiences for <span>Every Campus Stakeholder</span>
-          </h2>
-          <p className="lp-sub">
-            Three dedicated portals engineered to eliminate friction, paper registers,
-            and administrative delays.
-          </p>
+    <section ref={sectionRef} id="roles-section" className="lp-section lp-bg-a roles-pinned-section">
+      <div className="roles-pinned-inner">
+        {/* Sleek, minimal role navigation directly above cards — zero redundant headings */}
+        <div className="roles-nav-pills">
+          {ROLES.map((role, idx) => (
+            <button
+              key={role.id}
+              type="button"
+              onClick={() => handlePillClick(idx)}
+              className={`roles-nav-pill ${activeStep === idx ? `active ${role.theme}` : ''}`}
+            >
+              <span className="roles-nav-num">{role.stepNumber}</span>
+              <span className="roles-nav-title">{role.title}</span>
+            </button>
+          ))}
         </div>
 
-        <div ref={gridRef} className="roles-grid">
-          {ROLES.map((r, i) => (
+        {/* Pinned Card Deck Stage */}
+        <div className="roles-card-deck">
+          {ROLES.map((role, idx) => (
             <div
-              key={r.cls}
-              className={`role-card ${r.cls} reveal stagger-${i + 1} ${gridIn ? 'in-view' : ''}`}
+              key={role.id}
+              ref={cardRefs[idx]}
+              className={`roles-deck-card card-${idx} ${role.cls}`}
+              style={{ zIndex: 10 + idx * 10 }}
             >
-              <span className={`role-label ${r.labelCls}`}>{r.label}</span>
-              <div className={`role-icon ${r.iconCls}`}>
-                {r.icon}
+              {/* Left Column: Role Details & CTA */}
+              <div className="roles-card-left-col">
+                <div className="roles-card-primary-info">
+                  {/* Top Meta Bar */}
+                  <div className="roles-card-topbar">
+                    <span className={`roles-sys-code ${role.theme}`}>{role.code}</span>
+                    <span className="roles-sys-stage">STAGE {role.stepNumber} OF 03</span>
+                  </div>
+
+                  {/* Title & Tagline */}
+                  <div className="roles-card-title-group">
+                    <h3 className="roles-card-headline">{role.title}</h3>
+                    <div className={`roles-card-tagline ${role.theme}`}>{role.tagline}</div>
+                  </div>
+
+                  <p className="roles-card-desc">{role.desc}</p>
+                </div>
+
+                {/* Bottom Left: Pure CSS CTA and Auth Badge */}
+                <div className="roles-card-action-box">
+                  <Link to={role.link} className={`roles-card-cta-btn ${role.theme}`}>
+                    <span>{role.cta}</span>
+                    <span className="roles-cta-arrow">→</span>
+                  </Link>
+                  <div className="roles-card-access-chip">
+                    <span className={`status-dot ${role.theme}`} />
+                    <span>{role.accessLevel}</span>
+                  </div>
+                </div>
               </div>
-              <h3>{r.title}</h3>
-              <p>{r.desc}</p>
-              <ul className="role-features">
-                {r.features.map((f) => (
-                  <li key={f}>
-                    <span className={`role-check ${r.iconCls}`}>
-                      <Check className="w-2.5 h-2.5 stroke-[3]" />
-                    </span>
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link to={r.link} className={`role-cta ${r.iconCls}`}>
-                <span>{r.cta}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+
+              {/* Right Column: Workflows Matrix (Zero SVGs, Monospaced Protocol Indices) */}
+              <div className="roles-card-right-col">
+                <div className="roles-card-right-header">
+                  <div className="roles-workflows-title">
+                    <span className="roles-title-text">SYSTEM CAPABILITIES</span>
+                    <span className="roles-title-sub">REAL-TIME PROTOCOLS</span>
+                  </div>
+                  <span className={`roles-audited-badge ${role.theme}`}>
+                    <span className={`status-dot ${role.theme}`} />
+                    LIVE VERIFIED
+                  </span>
+                </div>
+
+                <div className="roles-protocols-grid">
+                  {role.features.map((feature, fIdx) => (
+                    <div key={fIdx} className="roles-protocol-item">
+                      <span className={`roles-protocol-num ${role.theme}`}>
+                        0{fIdx + 1}
+                      </span>
+                      <span className="roles-protocol-text">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="roles-card-footer-strip">
+                  <div className="roles-footer-meta">
+                    <span className="roles-footer-bullet">•</span>
+                    <span>ENTERPRISE RESIDENCE OS</span>
+                  </div>
+                  <div className="roles-footer-meta">
+                    <span className="roles-footer-bullet">•</span>
+                    <span>ZERO-TRUST ACCESS CONTROL</span>
+                  </div>
+                </div>
+              </div>
             </div>
           ))}
         </div>
