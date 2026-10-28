@@ -81,6 +81,30 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
     emergencyContact: '',
   });
 
+  const handleAutofillComplaint = () => {
+    setComplaintForm({
+      title: 'Study Table Light Socket Short-Circuiting',
+      category: 'Electrical',
+      priority: 'high',
+      description: 'The primary electrical power socket above the study desk is sparking when plugging in the laptop charger. Needs immediate technician inspection for safety.',
+    });
+  };
+
+  const handleAutofillLeave = () => {
+    const today = new Date();
+    const returnDate = new Date();
+    returnDate.setDate(today.getDate() + 3);
+
+    setLeaveForm({
+      leaveType: 'weekend',
+      destination: 'Flat 402, Green Meadows, Kothrud, Pune',
+      fromDate: today.toISOString().split('T')[0],
+      toDate: returnDate.toISOString().split('T')[0],
+      reason: 'Attending family cousin engagement ceremony and weekend stay with parents.',
+      emergencyContact: '+91 98765 11223',
+    });
+  };
+
   const [scanAttendanceModal, setScanAttendanceModal] = useState(false);
   const [visitorModal, setVisitorModal] = useState(false);
   const [viewingReceipt, setViewingReceipt] = useState(null); // fee object
@@ -1274,9 +1298,20 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
                 <FileText className="w-4 h-4 text-[#dfba73]" />
                 Lodge Grievance / Maintenance Complain
               </h3>
-              <button onClick={() => setComplaintModal(false)} className="text-slate-400 hover:text-white cursor-pointer">
-                <X className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleAutofillComplaint}
+                  className="px-2.5 py-1 rounded-lg bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
+                  title="Autofill sample maintenance complaint"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#dfba73]" />
+                  <span>Auto Fill Demo</span>
+                </button>
+                <button onClick={() => setComplaintModal(false)} className="text-slate-400 hover:text-white cursor-pointer">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
             <form onSubmit={handleComplaintSubmit} className="space-y-4 text-xs">
               <div>
@@ -1365,9 +1400,20 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
                 <Key className="w-4 h-4 text-[#dfba73]" />
                 Submit Leave Application
               </h3>
-              <button onClick={() => setLeaveModal(false)} className="text-slate-400 hover:text-white cursor-pointer">
-                <X className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleAutofillLeave}
+                  className="px-2.5 py-1 rounded-lg bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
+                  title="Autofill sample outstation leave application"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#dfba73]" />
+                  <span>Auto Fill Demo</span>
+                </button>
+                <button onClick={() => setLeaveModal(false)} className="text-slate-400 hover:text-white cursor-pointer">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
             <form onSubmit={handleLeaveSubmit} className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-3">

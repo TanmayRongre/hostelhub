@@ -13,7 +13,8 @@ import {
   Users,
   ShieldCheck,
   DoorOpen,
-  DollarSign
+  DollarSign,
+  Sparkles
 } from 'lucide-react';
 import api from '../../services/api';
 
@@ -45,6 +46,35 @@ export default function AdminHostelManagement({ onHostelsUpdated }) {
     rentPerMonth: 6500,
     status: 'available',
   });
+
+  const handleAutofillHostel = () => {
+    const blocks = ['Sahyadri Residency C', 'Nilgiri Premier Block', 'Aravali Tower B', 'Vindhya Scholars Wing'];
+    const codes = ['SAY-C', 'NIL-A', 'ARV-B', 'VIN-W'];
+    const idx = Math.floor(Math.random() * blocks.length);
+    setHostelForm({
+      name: blocks[idx],
+      code: codes[idx],
+      gender: 'boys',
+      capacity: 180,
+      totalRooms: 60,
+      address: 'North Quad, MountReach Campus',
+      status: 'active',
+    });
+  };
+
+  const handleAutofillRoom = () => {
+    const floor = Math.floor(1 + Math.random() * 3);
+    const roomNum = `${floor}0${Math.floor(1 + Math.random() * 9)}`;
+    setRoomForm({
+      hostel: selectedHostel || hostels[0]?._id || '',
+      roomNumber: roomNum,
+      floor: floor,
+      capacity: 2,
+      type: 'AC',
+      rentPerMonth: 6500,
+      status: 'available',
+    });
+  };
 
   const [toast, setToast] = useState(null);
   const showToast = (msg, type = 'success') => {
@@ -240,7 +270,18 @@ export default function AdminHostelManagement({ onHostelsUpdated }) {
                 <Building2 className="w-5 h-5 text-[#dfba73]" />
                 Create Hostel Complex
               </h3>
-              <button onClick={() => setHostelModalOpen(false)} className="w-7 h-7 rounded-lg bg-white/[0.05] border border-white/[0.08] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs">✕</button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleAutofillHostel}
+                  className="px-2.5 py-1 rounded-lg bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
+                  title="Autofill sample hostel details"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#dfba73]" />
+                  <span>Auto Fill Demo</span>
+                </button>
+                <button onClick={() => setHostelModalOpen(false)} className="w-7 h-7 rounded-lg bg-white/[0.05] border border-white/[0.08] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs">✕</button>
+              </div>
             </div>
 
             <form onSubmit={handleCreateHostel} className="space-y-4 text-xs">
@@ -323,7 +364,18 @@ export default function AdminHostelManagement({ onHostelsUpdated }) {
                 <DoorOpen className="w-5 h-5 text-[#dfba73]" />
                 Add Residential Room
               </h3>
-              <button onClick={() => setRoomModalOpen(false)} className="w-7 h-7 rounded-lg bg-white/[0.05] border border-white/[0.08] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs">✕</button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleAutofillRoom}
+                  className="px-2.5 py-1 rounded-lg bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
+                  title="Autofill sample room details"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#dfba73]" />
+                  <span>Auto Fill Demo</span>
+                </button>
+                <button onClick={() => setRoomModalOpen(false)} className="w-7 h-7 rounded-lg bg-white/[0.05] border border-white/[0.08] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs">✕</button>
+              </div>
             </div>
 
             <form onSubmit={handleCreateRoom} className="space-y-4 text-xs">

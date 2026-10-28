@@ -19,7 +19,8 @@ import {
   CreditCard,
   Eye,
   Lock,
-  UserCheck
+  UserCheck,
+  Sparkles
 } from 'lucide-react';
 import api from '../../services/api';
 
@@ -34,6 +35,10 @@ export default function AdminUserManagement({ onUserUpdated }) {
   const [roleModal, setRoleModal] = useState(null); // target user
   const [selectedRole, setSelectedRole] = useState('student');
   const [updatingRole, setUpdatingRole] = useState(false);
+
+  const handleAutofillRole = () => {
+    setSelectedRole((prev) => (prev === 'warden' ? 'admin' : 'warden'));
+  };
 
   // View Student Details Modal
   const [viewingStudent, setViewingStudent] = useState(null);
@@ -255,7 +260,18 @@ export default function AdminUserManagement({ onUserUpdated }) {
                 <ShieldCheck className="w-5 h-5 text-[#dfba73]" />
                 Modify User Authority & Role
               </h3>
-              <button onClick={() => setRoleModal(null)} className="text-slate-400 hover:text-white transition-colors">✕</button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleAutofillRole}
+                  className="px-2.5 py-1 rounded-lg bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
+                  title="Autofill sample role promotion"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#dfba73]" />
+                  <span>Auto Fill Demo</span>
+                </button>
+                <button onClick={() => setRoleModal(null)} className="text-slate-400 hover:text-white transition-colors">✕</button>
+              </div>
             </div>
 
             <div className="p-3.5 rounded-xl bg-[#121620] border border-white/5 space-y-1">

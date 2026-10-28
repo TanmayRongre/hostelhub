@@ -15,7 +15,8 @@ import {
   Lock,
   User,
   X,
-  ChevronDown
+  ChevronDown,
+  Sparkles
 } from 'lucide-react';
 import '../styles/AuthForm.css';
 
@@ -136,6 +137,17 @@ export default function AuthForm({ initialActive = false }) {
     }
   };
 
+  const handleRegisterAutofill = () => {
+    const demoNames = ['Aarav Sharma', 'Rohan Verma', 'Ananya Patel', 'Ishaan Gupta', 'Priya Deshmukh'];
+    const randomName = demoNames[Math.floor(Math.random() * demoNames.length)];
+    const randomNum = Math.floor(100 + Math.random() * 900);
+    setRegisterName(randomName);
+    setRegisterEmail(`${randomName.toLowerCase().replace(' ', '.')}${randomNum}@mountreach.edu`);
+    setRegisterRole('student');
+    setRegisterPassword('Student@123');
+    setRegisterError('');
+  };
+
   const handleSendReset = (e) => {
     e.preventDefault();
     setForgotSent(true);
@@ -174,7 +186,18 @@ export default function AuthForm({ initialActive = false }) {
             ════════════════════════════════════════ */}
         <div className="form-box login">
           <form onSubmit={handleLoginSubmit}>
-            <h1>Portal Sign In</h1>
+            <div className="flex items-center justify-between gap-2">
+              <h1>Portal Sign In</h1>
+              <button
+                type="button"
+                onClick={() => autofillDemo('student')}
+                className="px-2.5 py-1 rounded-lg bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-[11px] font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95 shrink-0"
+                title="Autofill demo student credentials"
+              >
+                <Sparkles className="w-3 h-3 text-[#dfba73]" />
+                <span>Auto Fill Demo</span>
+              </button>
+            </div>
             <p className="auth-subtitle">
               Access your institutional residence dashboard
             </p>
@@ -271,7 +294,18 @@ export default function AuthForm({ initialActive = false }) {
             ════════════════════════════════════════ */}
         <div className="form-box register">
           <form onSubmit={handleRegisterSubmit}>
-            <h1>Create Resident Account</h1>
+            <div className="flex items-center justify-between gap-2">
+              <h1>Create Account</h1>
+              <button
+                type="button"
+                onClick={handleRegisterAutofill}
+                className="px-2.5 py-1 rounded-lg bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-[11px] font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95 shrink-0"
+                title="Autofill realistic student registration data"
+              >
+                <Sparkles className="w-3 h-3 text-[#dfba73]" />
+                <span>Auto Fill Demo</span>
+              </button>
+            </div>
             <p className="auth-subtitle">
               Register as Student, Warden, or Administrator
             </p>
@@ -423,9 +457,19 @@ export default function AuthForm({ initialActive = false }) {
               </div>
             ) : (
               <form onSubmit={handleSendReset} className="space-y-3">
-                <p className="text-xs text-slate-400">
-                  Enter your registered institutional college email. We will generate an encrypted password reset link.
-                </p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs text-slate-400">
+                    Enter your registered institutional college email.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setForgotEmail('student@mountreach.edu')}
+                    className="px-2 py-0.5 rounded bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-[10px] font-semibold flex items-center gap-1 shrink-0 cursor-pointer"
+                  >
+                    <Sparkles className="w-2.5 h-2.5" />
+                    <span>Auto Fill</span>
+                  </button>
+                </div>
                 <input
                   type="email"
                   placeholder="name@mountreach.edu"

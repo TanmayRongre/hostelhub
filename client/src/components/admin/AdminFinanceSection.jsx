@@ -10,7 +10,8 @@ import {
   CheckCircle2,
   Receipt,
   Download,
-  Calendar
+  Calendar,
+  Sparkles
 } from 'lucide-react';
 import api from '../../services/api';
 
@@ -30,6 +31,17 @@ export default function AdminFinanceSection({ onFinanceUpdated }) {
     feeType: 'Hostel Fee',
     dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   });
+
+  const handleAutofillFee = () => {
+    const firstStudentId = students[0]?.user?._id || students[0]?.user || students[0]?._id || '';
+    setFeeForm({
+      student: firstStudentId,
+      title: 'Semester 2 Residence & Dining Fee',
+      amount: 39000,
+      feeType: 'Hostel Fee',
+      dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    });
+  };
 
   const [toast, setToast] = useState(null);
   const showToast = (msg, type = 'success') => {
@@ -212,7 +224,18 @@ export default function AdminFinanceSection({ onFinanceUpdated }) {
                 <Receipt className="w-5 h-5 text-[#dfba73]" />
                 Generate Student Fee Invoice
               </h3>
-              <button onClick={() => setCreateModal(false)} className="text-slate-400 hover:text-white transition-colors">✕</button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleAutofillFee}
+                  className="px-2.5 py-1 rounded-lg bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
+                  title="Autofill fee invoice demo details"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#dfba73]" />
+                  <span>Auto Fill Demo</span>
+                </button>
+                <button onClick={() => setCreateModal(false)} className="text-slate-400 hover:text-white transition-colors">✕</button>
+              </div>
             </div>
 
             <form onSubmit={handleCreateFee} className="space-y-4 text-xs">

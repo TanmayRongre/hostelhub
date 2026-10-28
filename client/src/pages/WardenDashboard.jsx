@@ -717,10 +717,11 @@ export default function WardenDashboard() {
                 <button
                   type="button"
                   onClick={handleDemoNoticeFill}
-                  className="px-2.5 py-1 rounded-md bg-[#c5a059]/10 text-[#dfba73] hover:bg-[#c5a059]/20 text-[11px] font-semibold transition-all cursor-pointer flex items-center gap-1.5"
+                  className="px-2.5 py-1 rounded-lg bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm active:scale-95"
+                  title="Autofill demonstration circular"
                 >
-                  <Sparkles className="w-3 h-3 text-[#dfba73]" />
-                  <span>Autofill Sample</span>
+                  <Sparkles className="w-3.5 h-3.5 text-[#dfba73]" />
+                  <span>Auto Fill Demo</span>
                 </button>
               </div>
               <button onClick={() => setNoticeModal(false)} className="w-7 h-7 rounded-lg bg-white/[0.05] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer">

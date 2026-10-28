@@ -370,9 +370,20 @@ export default function AdminContactInquiries() {
 
             {/* Resolution Notes */}
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                Staff Action &amp; Resolution Remarks
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                  Staff Action &amp; Resolution Remarks
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setResolutionNotes('Resident inquiry investigated by hostel administrative office. Maintenance technician dispatched to inspect room fixtures and resolved with student confirmation.')}
+                  className="px-2 py-0.5 rounded-md bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-[10px] font-semibold flex items-center gap-1 transition-all cursor-pointer shadow-sm active:scale-95"
+                  title="Autofill demonstration remarks"
+                >
+                  <Sparkles className="w-3 h-3 text-[#dfba73]" />
+                  <span>Auto Fill Demo</span>
+                </button>
+              </div>
               <textarea
                 rows={3}
                 placeholder="Add resolution notes or action taken..."

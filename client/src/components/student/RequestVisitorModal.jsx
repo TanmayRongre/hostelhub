@@ -71,10 +71,11 @@ export default function RequestVisitorModal({ isOpen, onClose, student, user, on
             <button
               type="button"
               onClick={handleDemoFill}
-              className="px-2.5 py-1 rounded-md bg-[#c5a059]/10 text-[#dfba73] border border-[#c5a059]/30 text-[11px] font-semibold hover:bg-[#c5a059]/20 transition-colors cursor-pointer flex items-center gap-1.5"
+              className="px-2.5 py-1 rounded-lg bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
+              title="Autofill visitor gatepass details"
             >
-              <Sparkles className="w-3 h-3 text-[#dfba73]" />
-              <span>Autofill Sample</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#dfba73]" />
+              <span>Auto Fill Demo</span>
             </button>
             <button
               onClick={onClose}

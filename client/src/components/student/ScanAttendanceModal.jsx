@@ -257,6 +257,19 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
     reader.readAsDataURL(file);
   };
 
+  const handleAutofillCode = async () => {
+    try {
+      const sessionRes = await api.getActiveAttendanceSession();
+      const code =
+        sessionRes?.data?.sessionToken ||
+        sessionRes?.data?.qrPayload ||
+        `ATT-${student?.hostel?.code || 'BLK-A'}-${new Date().toISOString().split('T')[0]}`;
+      setManualCode(code);
+    } catch {
+      setManualCode(`ATT-${student?.hostel?.code || 'BLK-A'}-2026`);
+    }
+  };
+
   const handleManualSubmit = (e) => {
     e.preventDefault();
     if (!manualCode.trim()) return;
@@ -408,9 +421,20 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
           {/* Manual Input Drawer */}
           {showManualInput && !scanResult && (
             <form onSubmit={handleManualSubmit} className="space-y-2 text-left animate-fade-in">
-              <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                Enter Warden QR Session Code
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                  Enter Warden QR Session Code
+                </label>
+                <button
+                  type="button"
+                  onClick={handleAutofillCode}
+                  className="px-2 py-0.5 rounded-md bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-[10.5px] font-semibold flex items-center gap-1 transition-all cursor-pointer shadow-sm active:scale-95"
+                  title="Autofill active session code"
+                >
+                  <Sparkles className="w-3 h-3 text-[#dfba73]" />
+                  <span>Auto Fill Demo</span>
+                </button>
+              </div>
               <div className="flex gap-2">
                 <input
                   type="text"

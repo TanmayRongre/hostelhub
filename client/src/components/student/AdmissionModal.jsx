@@ -119,6 +119,20 @@ export default function AdmissionModal({ isOpen, onClose, onSuccess, initialUser
     }
   };
 
+  const handleAutofillAdmission = () => {
+    setFormData((prev) => ({
+      ...prev,
+      phone: '+91 98765 12340',
+      parentName: 'Rajesh Sharma',
+      parentPhone: '+91 98765 09876',
+      address: 'Plot 42, Green Avenue, Sector 5, Kothrud, Pune, Maharashtra 411038',
+      roomType: 'AC',
+      paymentOption: 'full',
+      enrollmentNumber: prev.enrollmentNumber || `CS2026-${Math.floor(100 + Math.random() * 900)}`,
+    }));
+    setError('');
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in font-sans">
       <div className="relative w-full max-w-3xl bg-[#0e1219] border border-white/10 rounded-2xl shadow-2xl overflow-hidden max-h-[94vh] flex flex-col">
@@ -130,7 +144,7 @@ export default function AdmissionModal({ isOpen, onClose, onSuccess, initialUser
             </div>
             <div>
               <h3 className="text-lg font-bold font-serif text-white tracking-tight flex items-center gap-2">
-                Hostel Admission & Allotment
+                Hostel Admission &amp; Allotment
                 <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30 font-sans font-semibold uppercase tracking-wider">
                   Session 2026
                 </span>
@@ -140,12 +154,23 @@ export default function AdmissionModal({ isOpen, onClose, onSuccess, initialUser
               </p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/[0.1] flex items-center justify-center transition-colors cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleAutofillAdmission}
+              className="px-2.5 py-1.5 rounded-lg bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
+              title="Autofill demonstration student admission details"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#dfba73]" />
+              <span>Auto Fill Demo</span>
+            </button>
+            <button
+              onClick={onClose}
+              className="w-8 h-8 rounded-lg bg-white/[0.05] border border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/[0.1] flex items-center justify-center transition-colors cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Modal Form */}
