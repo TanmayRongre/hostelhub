@@ -230,18 +230,41 @@ const scanAttendance = async (req, res, next) => {
     const todayEnd = new Date();
     todayEnd.setHours(23, 59, 59, 999);
 
+    const forceReverify = req.body.force || req.query.force === 'true';
+
     // Check if already scanned today
     let record = await Attendance.findOne({
       student: studentId,
       date: { $gte: todayStart, $lte: todayEnd },
     });
 
-    if (record) {
+    if (record && !forceReverify) {
       return res.status(200).json({
         success: true,
         alreadyMarked: true,
         message: 'Attendance already recorded and verified for today!',
         data: record,
+      });
+    }
+
+    if (record && forceReverify) {
+      record.date = new Date();
+      record.status = 'present';
+      record.remarks = activeSession
+        ? `Re-verified via Warden QR Code: ${activeSession.sessionToken}`
+        : 'Re-verified via Smart Hostel QR Scan Terminal';
+      await record.save();
+
+      const populated = await Attendance.findById(record._id)
+        .populate('student', 'name email')
+        .populate('hostel', 'name code')
+        .populate('room', 'roomNumber');
+
+      return res.status(200).json({
+        success: true,
+        alreadyMarked: false,
+        message: '✅ Daily resident presence re-verified & updated successfully!',
+        data: populated,
       });
     }
 

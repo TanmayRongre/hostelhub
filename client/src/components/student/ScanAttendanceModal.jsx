@@ -27,6 +27,7 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
   const [manualCode, setManualCode] = useState('');
   const [showManualInput, setShowManualInput] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [facingMode, setFacingMode] = useState('environment'); // 'environment' | 'user'
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -34,6 +35,7 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
   const animationFrameId = useRef(null);
   const streamRef = useRef(null);
   const hasScannedRef = useRef(false);
+  const lastScanTimeRef = useRef(0);
 
   // Play audio chime on successful scan
   const playBeep = () => {
@@ -58,25 +60,34 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
   };
 
   // Start Camera Stream with hardware fallback
-  const startCamera = async () => {
+  const startCamera = async (currentFacing = facingMode) => {
     setError('');
     setCameraError('');
     hasScannedRef.current = false;
 
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error('Camera access is not supported in this browser. Please use code verification.');
+        throw new Error('Camera access is not supported in this browser. Please use code verification or Instant Verify.');
+      }
+
+      // Stop previous tracks if switching
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
       }
 
       let stream = null;
       try {
-        // Try environment/back camera first
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
+          video: {
+            facingMode: { ideal: currentFacing },
+            width: { ideal: 1280, max: 1920 },
+            height: { ideal: 720, max: 1080 },
+          },
           audio: false,
         });
       } catch {
-        // Fallback to front/webcam camera
+        // Fallback to any available video source
         stream = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: false,
@@ -103,8 +114,8 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
       console.warn('Camera start error:', err);
       setCameraError(
         err.name === 'NotAllowedError'
-          ? 'Camera permission denied. Please allow camera permissions, upload a QR screenshot, or enter the session code.'
-          : 'Could not connect to camera device. You can verify using image upload or the instant verification button below.'
+          ? 'Camera permission denied. Click Instant Verify, upload a QR screenshot, or enter the session code below.'
+          : 'Camera device unavailable on this hardware. Click Instant Verify or use code entry below.'
       );
       setCameraActive(false);
       setScanning(false);
@@ -128,6 +139,12 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
     setScanning(false);
   };
 
+  const toggleCameraFacing = () => {
+    const nextMode = facingMode === 'environment' ? 'user' : 'environment';
+    setFacingMode(nextMode);
+    startCamera(nextMode);
+  };
+
   // Ensure video element receives stream when active
   useEffect(() => {
     if (cameraActive && streamRef.current && videoRef.current) {
@@ -138,18 +155,31 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
     }
   }, [cameraActive]);
 
-  // Continuous frame analysis with jsQR
+  // Continuous frame analysis with jsQR (downscaled & throttled for 60fps UI)
   const scanVideoFrame = () => {
     if (!videoRef.current || !canvasRef.current || hasScannedRef.current) return;
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
-    if (video.readyState >= 2 && video.videoWidth > 0 && video.videoHeight > 0) {
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    const now = performance.now();
+    // Throttle to every 110ms to keep CPU usage minimal and video render fluid
+    if (now - lastScanTimeRef.current < 110) {
+      if (scanning && !hasScannedRef.current) {
+        animationFrameId.current = requestAnimationFrame(scanVideoFrame);
+      }
+      return;
+    }
+    lastScanTimeRef.current = now;
 
+    if (video.readyState >= 2 && video.videoWidth > 0 && video.videoHeight > 0) {
+      // Downscale to max 480px width for fast, reliable decoding without freezing
+      const maxDim = 480;
+      const scale = Math.min(1, maxDim / Math.max(video.videoWidth, video.videoHeight));
+      canvas.width = Math.max(1, Math.floor(video.videoWidth * scale));
+      canvas.height = Math.max(1, Math.floor(video.videoHeight * scale));
+
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
       if (ctx) {
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -197,15 +227,26 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
   }, [isOpen]);
 
   // Process decoded QR or manual session token
-  const handleProcessScannedData = async (rawData) => {
+  const handleProcessScannedData = async (rawData, force = false) => {
     stopCamera();
     setError('');
     setVerifying(true);
 
+    let extractedToken = typeof rawData === 'string' ? rawData.trim() : '';
+    // If rawData is JSON string, parse out the sessionToken
+    if (typeof rawData === 'string' && rawData.startsWith('{')) {
+      try {
+        const parsed = JSON.parse(rawData);
+        if (parsed.sessionToken) extractedToken = parsed.sessionToken;
+        else if (parsed.token) extractedToken = parsed.token;
+      } catch {}
+    }
+
     try {
       const res = await api.scanAttendance({
         qrData: rawData,
-        sessionToken: typeof rawData === 'string' && rawData.startsWith('ATT-') ? rawData : undefined,
+        sessionToken: extractedToken.startsWith('ATT-') ? extractedToken : undefined,
+        force,
       });
 
       if (res.success) {
@@ -234,11 +275,13 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
       const img = new Image();
       img.onload = () => {
         const canvas = canvasRef.current || document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
+        const maxDim = 800;
+        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        canvas.width = Math.floor(img.width * scale);
+        canvas.height = Math.floor(img.height * scale);
         const ctx = canvas.getContext('2d');
         if (ctx) {
-          ctx.drawImage(img, 0, 0);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
           const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
           const code = jsQR(imageData.data, imageData.width, imageData.height, {
             inversionAttempts: 'attemptBoth',
@@ -256,6 +299,7 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
     };
     reader.readAsDataURL(file);
   };
+
 
   const handleAutofillCode = async () => {
     try {
@@ -277,7 +321,7 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
   };
 
   // 1-Click Demo Scanner (fetches live active session or verifies instantly)
-  const handleInstantDemoScan = async () => {
+  const handleInstantDemoScan = async (force = false) => {
     setError('');
     try {
       const sessionRes = await api.getActiveAttendanceSession();
@@ -286,7 +330,7 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
         sessionRes?.data?.qrPayload ||
         `ATT-${student?.hostel?.code || 'SAY'}-ACTIVE`;
       playBeep();
-      await handleProcessScannedData(token);
+      await handleProcessScannedData(token, force);
     } catch (err) {
       setError(err.message || 'Failed to verify attendance');
     }
@@ -342,7 +386,7 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
                 <CheckCircle2 className="w-8 h-8" />
               </div>
               <h4 className="text-base font-bold text-white">
-                {scanResult.alreadyMarked ? 'Already Verified!' : 'Attendance Verified Present!'}
+                {scanResult.alreadyMarked ? 'Already Verified Today!' : 'Attendance Verified Present!'}
               </h4>
               <p className="text-xs text-emerald-300/90">{scanResult.message}</p>
               <div className="text-[11px] text-slate-400 pt-2 border-t border-emerald-900/50 flex items-center justify-center gap-4">
@@ -350,6 +394,16 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
                 <span>•</span>
                 <span>Date: {new Date().toLocaleDateString()}</span>
               </div>
+              {scanResult.alreadyMarked && (
+                <button
+                  type="button"
+                  onClick={() => handleInstantDemoScan(true)}
+                  className="mt-2 w-full py-2 px-3 rounded-lg bg-[#c5a059]/15 hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-xs font-semibold text-[#dfba73] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                >
+                  <Zap className="w-3.5 h-3.5" />
+                  <span>Re-verify / Force Update Presence</span>
+                </button>
+              )}
             </div>
           ) : (
             <div className="relative mx-auto w-full max-w-[280px] h-[280px] rounded-xl bg-[#090b10] border-2 border-[#c5a059]/40 flex flex-col items-center justify-center overflow-hidden shadow-inner">
@@ -366,6 +420,15 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
                 <>
                   {/* Animated Optical Laser Line */}
                   <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_15px_#34d399] animate-bounce z-20 pointer-events-none" />
+                  {/* Switch Camera Button */}
+                  <button
+                    type="button"
+                    onClick={toggleCameraFacing}
+                    className="absolute top-2.5 right-2.5 z-30 p-2 rounded-lg bg-black/60 hover:bg-black/80 text-white/80 hover:text-white border border-white/20 transition-all cursor-pointer backdrop-blur-sm"
+                    title="Switch Camera (front/back)"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                  </button>
                 </>
               ) : (
                 <div className="p-6 text-center space-y-3 z-10">
@@ -380,6 +443,13 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
                       {cameraError}
                     </div>
                   )}
+                  <button
+                    type="button"
+                    onClick={() => startCamera()}
+                    className="px-3 py-1 rounded bg-white/[0.06] hover:bg-white/[0.12] text-[11px] text-slate-300 hover:text-white border border-white/10 transition-colors"
+                  >
+                    Retry Camera
+                  </button>
                 </div>
               )}
 
@@ -463,7 +533,7 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
                   <button
                     type="button"
                     disabled={verifying}
-                    onClick={handleInstantDemoScan}
+                    onClick={() => handleInstantDemoScan(false)}
                     className="flex-1 py-3 rounded-lg btn-arch-primary text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all"
                   >
                     <Zap className={`w-4 h-4 text-[#090b10] ${verifying ? 'animate-spin' : ''}`} />
@@ -491,13 +561,28 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
                 </div>
               </>
             ) : (
-              <button
-                type="button"
-                onClick={onClose}
-                className="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold cursor-pointer"
-              >
-                Close Scanner
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setScanResult(null);
+                    setError('');
+                    hasScannedRef.current = false;
+                    startCamera();
+                  }}
+                  className="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold cursor-pointer border border-slate-700 flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span>Scan Again</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="flex-1 py-3 rounded-xl btn-arch-primary text-xs font-semibold cursor-pointer"
+                >
+                  Done
+                </button>
+              </div>
             )}
           </div>
         </div>

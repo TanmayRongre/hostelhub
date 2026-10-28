@@ -72,22 +72,24 @@ export default function WardenAttendanceQRModal({ isOpen, onClose, hostel, atten
 
   useEffect(() => {
     if (sessionData && canvasRef.current) {
+      // Use clean session token directly for large, distinct, high-contrast QR dots that scan easily from screens
       const payloadString =
-        typeof sessionData.qrPayload === 'string'
+        sessionData.sessionToken ||
+        (typeof sessionData.qrPayload === 'string'
           ? sessionData.qrPayload
-          : JSON.stringify(sessionData.qrPayload || { sessionToken: sessionData.sessionToken });
+          : JSON.stringify(sessionData.qrPayload));
 
       QRCode.toCanvas(
         canvasRef.current,
         payloadString,
         {
           width: fullscreen ? 360 : 260,
-          margin: 2,
+          margin: 3,
           color: {
             dark: '#030712',
             light: '#ffffff',
           },
-          errorCorrectionLevel: 'H',
+          errorCorrectionLevel: 'M',
         },
         (err) => {
           if (err) console.error('QR render error:', err);
