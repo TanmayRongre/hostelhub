@@ -36,9 +36,9 @@ export default function HeroSection() {
             </div>
 
             <h1 className="hero-title-anim">
-              Institutional Living<br />
-              <span>Re-engineered</span><br />
-              for Modern Campuses
+              Better Hostel Living,<br />
+              <span>All in One Place</span><br />
+              for Students & Staff
             </h1>
 
             <p className="home-hero-desc hero-desc-anim">
