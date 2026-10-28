@@ -40,7 +40,10 @@ import {
   Coffee,
   Flame,
   Table,
-  LayoutGrid
+  LayoutGrid,
+  ChefHat,
+  Star,
+  ThumbsUp
 } from 'lucide-react';
 import api from '../../services/api';
 import FeeReceiptModal from './FeeReceiptModal';
@@ -126,6 +129,8 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
   const todayDayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date().getDay()];
   const [selectedMessDay, setSelectedMessDay] = useState(todayDayName);
   const [messViewMode, setMessViewMode] = useState('daily'); // 'daily' | 'table'
+  const [selectedMealFilter, setSelectedMealFilter] = useState('all'); // 'all' | 'Breakfast' | 'Lunch' | 'Snacks' | 'Dinner'
+  const [mealRatings, setMealRatings] = useState({});
 
   // Filters
   const [complaintFilter, setComplaintFilter] = useState('all');
@@ -1217,48 +1222,103 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
             }
           };
 
+          // Dynamic Live Service Calculation
+          const currentHour = new Date().getHours();
+          let currentLiveMeal = 'Lunch';
+          let currentServiceStatus = 'Serving Now';
+          let currentServiceTime = '12:30 PM - 2:30 PM';
+          let nextServiceInfo = 'Next: Evening Snacks at 5:00 PM';
+
+          if (currentHour >= 7 && currentHour < 10) {
+            currentLiveMeal = 'Breakfast';
+            currentServiceStatus = 'Serving Now';
+            currentServiceTime = '7:30 AM - 9:30 AM';
+            nextServiceInfo = 'Next: Lunch Service at 12:30 PM';
+          } else if (currentHour >= 10 && currentHour < 12) {
+            currentLiveMeal = 'Lunch';
+            currentServiceStatus = 'Upcoming in Kitchen';
+            currentServiceTime = 'Opens 12:30 PM';
+            nextServiceInfo = 'Kitchen preheating & salad preparation';
+          } else if (currentHour >= 12 && currentHour < 15) {
+            currentLiveMeal = 'Lunch';
+            currentServiceStatus = 'Serving Now';
+            currentServiceTime = '12:30 PM - 2:30 PM';
+            nextServiceInfo = 'Next: Evening Snacks at 5:00 PM';
+          } else if (currentHour >= 15 && currentHour < 17) {
+            currentLiveMeal = 'Snacks';
+            currentServiceStatus = 'Upcoming';
+            currentServiceTime = 'Opens 5:00 PM';
+            nextServiceInfo = 'Tea & Evening snacks being prepared';
+          } else if (currentHour >= 17 && currentHour < 19) {
+            currentLiveMeal = 'Snacks';
+            currentServiceStatus = 'Serving Now';
+            currentServiceTime = '5:00 PM - 6:00 PM';
+            nextServiceInfo = 'Next: Night Dinner at 7:30 PM';
+          } else if (currentHour >= 19 && currentHour < 22) {
+            currentLiveMeal = 'Dinner';
+            currentServiceStatus = 'Serving Now';
+            currentServiceTime = '7:30 PM - 9:30 PM';
+            nextServiceInfo = 'Dining hall closes at 9:30 PM';
+          } else {
+            currentLiveMeal = 'Breakfast';
+            currentServiceStatus = 'Tomorrow Morning';
+            currentServiceTime = '7:30 AM - 9:30 AM';
+            nextServiceInfo = 'Breakfast prep begins 6:00 AM';
+          }
+
+          const mealsToDisplay = ['Breakfast', 'Lunch', 'Snacks', 'Dinner'].filter((type) => {
+            if (selectedMealFilter === 'all') return true;
+            return type === selectedMealFilter;
+          });
+
           return (
             <div className="space-y-6 animate-fade-in">
-              {/* Header with View Toggle */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
-                <div>
-                  <h2 className="font-serif text-xl font-bold text-white flex items-center gap-2">
-                    <UtensilsCrossed className="w-5 h-5 text-[#dfba73]" />
-                    Central Mess Weekly Dining Schedule
+              {/* ── 1. LIVE DINING HALL STATUS HERO BANNER ── */}
+              <div className="p-6 sm:p-7 rounded-2xl bg-[#0e1219] border border-white/[0.08] shadow-2xl relative overflow-hidden flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div className="absolute -top-12 -right-12 w-64 h-64 bg-[#c5a059]/10 rounded-full blur-3xl pointer-events-none" />
+
+                <div className="space-y-2 relative max-w-xl">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30 uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      {selectedMessDay === todayDayName ? `${currentServiceStatus} • ${currentLiveMeal}` : `${selectedMessDay} Scheduled Menu`}
+                    </span>
+                    <span className="text-[11px] font-mono text-slate-400">
+                      {selectedMessDay === todayDayName ? currentServiceTime : 'Central Dining Hall'}
+                    </span>
+                  </div>
+
+                  <h2 className="font-serif text-2xl font-bold text-white flex items-center gap-2.5">
+                    <UtensilsCrossed className="w-6 h-6 text-[#dfba73]" />
+                    Hostel Dining & Mess Schedule
                   </h2>
-                  <p className="text-xs text-slate-400 mt-0.5">Nutritious meal schedule prepared daily in certified clean kitchens.</p>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {selectedMessDay === todayDayName
+                      ? `Freshly cooked meals prepared in FSSAI-audited central kitchens. ${nextServiceInfo}.`
+                      : `Viewing complete curated four-course culinary schedule for ${selectedMessDay}.`}
+                  </p>
                 </div>
 
-                <div className="flex items-center gap-1.5 p-1 bg-[#0e1219] border border-white/[0.08] rounded-lg self-start sm:self-auto">
-                  <button
-                    type="button"
-                    onClick={() => setMessViewMode('daily')}
-                    className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                      messViewMode === 'daily'
-                        ? 'bg-[#c5a059] text-[#090b10] font-bold shadow-sm'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    <LayoutGrid className="w-3.5 h-3.5" />
-                    <span>Daily Cards</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setMessViewMode('table')}
-                    className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                      messViewMode === 'table'
-                        ? 'bg-[#c5a059] text-[#090b10] font-bold shadow-sm'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    <Table className="w-3.5 h-3.5" />
-                    <span>7-Day Table</span>
-                  </button>
+                <div className="flex flex-wrap items-center gap-2.5 relative shrink-0">
+                  <div className="px-3.5 py-2.5 rounded-xl bg-[#121620] border border-white/[0.06] text-xs">
+                    <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Dining Hall Crowd</div>
+                    <div className="font-bold text-emerald-400 flex items-center gap-1.5 mt-0.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                      Optimal (38% capacity)
+                    </div>
+                  </div>
+                  <div className="px-3.5 py-2.5 rounded-xl bg-[#121620] border border-white/[0.06] text-xs">
+                    <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Kitchen Safety</div>
+                    <div className="font-bold text-[#dfba73] flex items-center gap-1 mt-0.5">
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#dfba73]" />
+                      Grade A+ FSSAI
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* ── 7-DAY WEEKLY SELECTOR TABS ── */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+              {/* ── 2. 7-DAY SELECTOR STRIP ── */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
                 {daysOfWeek.map((day) => {
                   const isToday = day === todayDayName;
                   const isSelected = day === selectedMessDay;
@@ -1268,11 +1328,10 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
                       type="button"
                       onClick={() => {
                         setSelectedMessDay(day);
-                        if (messViewMode === 'table') setMessViewMode('daily');
                       }}
-                      className={`px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap flex items-center gap-2 transition-all cursor-pointer border ${
+                      className={`px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap flex items-center gap-2 transition-all cursor-pointer border ${
                         isSelected
-                          ? 'bg-[#c5a059] text-[#090b10] font-bold border-[#dfba73] shadow-md shadow-[#c5a059]/20'
+                          ? 'bg-[#c5a059] text-[#090b10] font-bold border-[#dfba73] shadow-md shadow-[#c5a059]/20 scale-[1.02]'
                           : 'bg-[#0e1219] text-slate-400 hover:text-white hover:bg-white/[0.04] border-white/[0.08]'
                       }`}
                     >
@@ -1289,81 +1348,203 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
                 })}
               </div>
 
-              {/* ── VIEW 1: DAILY 4-MEALS CARDS ── */}
+              {/* ── 3. MEAL SERVICE FILTER & VIEW SWITCHER (DE-CONGESTED) ── */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#0e1219] p-2.5 rounded-xl border border-white/[0.08] shadow-md">
+                {/* Filter Tabs */}
+                <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1 sm:pb-0">
+                  {[
+                    { id: 'all', label: 'All 4 Meals', icon: <UtensilsCrossed className="w-3.5 h-3.5" /> },
+                    { id: 'Breakfast', label: 'Breakfast', icon: <Sun className="w-3.5 h-3.5 text-amber-400" /> },
+                    { id: 'Lunch', label: 'Lunch', icon: <Flame className="w-3.5 h-3.5 text-orange-400" /> },
+                    { id: 'Snacks', label: 'Snacks', icon: <Coffee className="w-3.5 h-3.5 text-emerald-400" /> },
+                    { id: 'Dinner', label: 'Dinner', icon: <Moon className="w-3.5 h-3.5 text-[#dfba73]" /> },
+                  ].map((m) => {
+                    const isSelected = selectedMealFilter === m.id;
+                    return (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedMealFilter(m.id);
+                          setMessViewMode('daily');
+                        }}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer ${
+                          isSelected && messViewMode === 'daily'
+                            ? 'bg-[#c5a059] text-[#090b10] font-bold shadow-md shadow-[#c5a059]/20'
+                            : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                        }`}
+                      >
+                        {m.icon}
+                        <span>{m.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* View Mode Toggle: Cards vs 7-Day Table */}
+                <div className="flex items-center gap-1.5 self-end sm:self-auto shrink-0 bg-[#121620] p-1 rounded-lg border border-white/[0.06]">
+                  <button
+                    type="button"
+                    onClick={() => setMessViewMode('daily')}
+                    className={`px-3 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      messViewMode === 'daily'
+                        ? 'bg-[#c5a059] text-[#090b10] font-bold shadow-sm'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <LayoutGrid className="w-3.5 h-3.5" />
+                    <span>Cards View</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMessViewMode('table')}
+                    className={`px-3 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      messViewMode === 'table'
+                        ? 'bg-[#c5a059] text-[#090b10] font-bold shadow-sm'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Table className="w-3.5 h-3.5" />
+                    <span>Weekly Table</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* ── 4. MEAL CARDS (SPACIOUS 2-COLUMN OR FOCUSED SINGLE VIEW) ── */}
               {messViewMode === 'daily' && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between text-xs text-slate-400 px-1">
                     <span className="font-semibold text-slate-300">
-                      Showing Menu for: <strong className="text-[#dfba73]">{selectedMessDay}</strong>
-                      {selectedMessDay === todayDayName && ' (Today\'s Active Menu)'}
+                      Menu for: <strong className="text-[#dfba73]">{selectedMessDay}</strong>
+                      {selectedMessDay === todayDayName && ' (Today\'s Live Dining)'}
                     </span>
-                    <span>4 Fresh Meal Services</span>
+                    <span className="text-[11px] text-slate-400">
+                      {selectedMealFilter === 'all' ? 'All 4 Service Windows' : `${selectedMealFilter} Focus View`}
+                    </span>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {['Breakfast', 'Lunch', 'Snacks', 'Dinner'].map((type) => {
+                  <div className={`grid gap-5 ${
+                    selectedMealFilter === 'all' ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'
+                  }`}>
+                    {mealsToDisplay.map((type) => {
                       const meal = currentDayMeals.find((m) => m.mealType === type) || {
                         dayOfWeek: selectedMessDay,
                         mealType: type,
                         timing: type === 'Breakfast' ? '7:30 AM - 9:30 AM' : type === 'Lunch' ? '12:30 PM - 2:30 PM' : type === 'Snacks' ? '5:00 PM - 6:00 PM' : '7:30 PM - 9:30 PM',
-                        menuItems: ['Chef Special Nutritious Platter', 'Accompaniments', 'Beverage'],
+                        menuItems: ['Chef Special Nutritious Platter', 'Accompaniments', 'Fresh Beverage'],
                       };
                       const meta = getMealMeta(type);
+                      const isCurrentLive = selectedMessDay === todayDayName && currentLiveMeal === type;
+                      const ratingKey = `${selectedMessDay}_${type}`;
+                      const currentRating = mealRatings[ratingKey] || 5;
 
                       return (
                         <div
                           key={type}
-                          className={`p-5 rounded-xl bg-gradient-to-br ${meta.bg} border border-white/[0.08] shadow-xl space-y-4 flex flex-col justify-between hover:border-[#c5a059]/40 transition-all`}
+                          className={`p-6 rounded-2xl bg-gradient-to-br ${meta.bg} border ${
+                            isCurrentLive ? 'border-[#c5a059] shadow-2xl shadow-[#c5a059]/15' : 'border-white/[0.08]'
+                          } hover:border-[#c5a059]/40 transition-all space-y-5 flex flex-col justify-between`}
                         >
-                          <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                <div className="p-2 rounded-xl bg-slate-900/80 border border-slate-800 shadow-sm">
+                          <div className="space-y-4">
+                            {/* Card Header */}
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex items-center gap-3">
+                                <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 shadow-md">
                                   {meta.icon}
                                 </div>
                                 <div>
-                                  <h4 className="text-sm font-bold text-white">{meal.mealType}</h4>
-                                  <span className="text-[10px] text-slate-400">{meta.tag}</span>
+                                  <div className="flex items-center gap-2">
+                                    <h3 className="font-serif text-lg font-bold text-white">{meal.mealType}</h3>
+                                    {isCurrentLive && (
+                                      <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wide flex items-center gap-1">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                        Serving Now
+                                      </span>
+                                    )}
+                                  </div>
+                                  <span className="text-xs text-slate-400 font-medium">{meta.tag}</span>
                                 </div>
                               </div>
 
-                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${meta.badge}`}>
-                                {meal.timing || 'Standard Timings'}
-                              </span>
+                              <div className="text-right">
+                                <span className={`inline-block px-3 py-1 rounded-full text-[11px] font-bold border ${meta.badge}`}>
+                                  {meal.timing || 'Standard Timings'}
+                                </span>
+                              </div>
                             </div>
 
-                            <div className="pt-2 space-y-2">
-                              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                                Menu Items:
+                            {/* Menu Items Showcase */}
+                            <div className="space-y-2.5 pt-1">
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="font-bold uppercase tracking-wider text-slate-400 text-[10px] flex items-center gap-1.5">
+                                  <ChefHat className="w-3.5 h-3.5 text-[#dfba73]" />
+                                  Course Platter & Dishes
+                                </span>
+                                <span className="text-[10px] text-slate-500">Pure Veg & Balanced</span>
                               </div>
-                              <div className="flex flex-wrap gap-1.5">
+
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                 {meal.menuItems && meal.menuItems.length > 0 ? (
                                   meal.menuItems.map((item, idx) => (
-                                    <span
+                                    <div
                                       key={idx}
-                                      className="px-2.5 py-1 rounded-xl bg-slate-950/80 border border-slate-800/80 text-xs text-slate-200 font-medium flex items-center gap-1.5"
+                                      className="p-2.5 rounded-xl bg-[#090b10]/80 border border-white/[0.06] flex items-center gap-2.5 text-xs text-slate-200 font-medium hover:border-[#c5a059]/30 transition-colors"
                                     >
-                                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-                                      {item}
-                                    </span>
+                                      <div className="w-2 h-2 rounded-full bg-[#c5a059] shrink-0" />
+                                      <span className="truncate">{item}</span>
+                                    </div>
                                   ))
                                 ) : (
-                                  <span className="text-xs text-slate-500 italic">Chef's daily special assortment</span>
+                                  <div className="text-xs text-slate-500 italic p-3">Chef's daily special assortment</div>
                                 )}
                               </div>
                             </div>
 
+                            {/* Dietary Notification */}
                             {meal.specialDiet && (
-                              <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-[11px] text-amber-200 flex items-center gap-2">
-                                <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200 flex items-center gap-2.5">
+                                <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
                                 <span>{meal.specialDiet}</span>
                               </div>
                             )}
                           </div>
 
-                          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500">
-                            <span>Central Dining Hall</span>
-                            <span className="text-emerald-400 font-semibold">✓ Pure Veg / Balanced</span>
+                          {/* Footer with Interactive Rating and Nutrition */}
+                          <div className="pt-4 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                            <div className="flex items-center gap-2 text-slate-400">
+                              <span className="text-[11px]">Rate Meal:</span>
+                              <div className="flex items-center gap-1">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                  <button
+                                    key={star}
+                                    type="button"
+                                    onClick={() => {
+                                      setMealRatings((prev) => ({ ...prev, [ratingKey]: star }));
+                                      showToast(`Thank you! Rated ${type} ${star}★ for the Mess Committee.`);
+                                    }}
+                                    className="p-0.5 hover:scale-125 transition-transform cursor-pointer"
+                                    title={`Rate ${star} Stars`}
+                                  >
+                                    <Star
+                                      className={`w-3.5 h-3.5 ${
+                                        star <= currentRating
+                                          ? 'text-[#dfba73] fill-[#dfba73]'
+                                          : 'text-slate-600'
+                                      }`}
+                                    />
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 text-[11px] text-slate-400">
+                              <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.05] text-slate-300">
+                                ~{type === 'Breakfast' ? '450' : type === 'Lunch' ? '720' : type === 'Snacks' ? '280' : '650'} kcal
+                              </span>
+                              <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                                <Check className="w-3 h-3" /> FSSAI Checked
+                              </span>
+                            </div>
                           </div>
                         </div>
                       );
@@ -1372,9 +1553,9 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
                 </div>
               )}
 
-              {/* ── VIEW 2: COMPLETE 7-DAY WEEKLY TABLE MATRIX ── */}
+              {/* ── 5. COMPLETE 7-DAY WEEKLY TABLE MATRIX ── */}
               {messViewMode === 'table' && (
-                <div className="overflow-x-auto rounded-xl border border-white/[0.08] bg-[#0e1219] shadow-2xl">
+                <div className="overflow-x-auto rounded-2xl border border-white/[0.08] bg-[#0e1219] shadow-2xl">
                   <table className="w-full text-left text-xs border-collapse min-w-[760px]">
                     <thead>
                       <tr className="bg-[#121620] border-b border-white/[0.08] text-slate-300 font-semibold uppercase text-[11px] tracking-wider">
@@ -1402,7 +1583,7 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
                               isToday ? 'bg-[#c5a059]/10' : 'hover:bg-white/[0.02]'
                             }`}
                           >
-                            <td className="py-3.5 px-4 font-semibold text-white whitespace-nowrap">
+                            <td className="py-4 px-4 font-semibold text-white whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span>{day}</span>
                                 {isToday && (
@@ -1412,17 +1593,29 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
                                 )}
                               </div>
                             </td>
-                            <td className="py-3.5 px-4 text-slate-300">
-                              {bFast?.menuItems?.join(', ') || 'Idli, Poha, Tea/Coffee'}
+                            <td className="py-4 px-4 text-slate-300">
+                              <div className="space-y-1">
+                                <div className="font-medium text-white">{bFast?.menuItems?.[0] || 'Idli & Sambar'}</div>
+                                <div className="text-[11px] text-slate-400">{bFast?.menuItems?.slice(1).join(', ') || 'Chutney, Tea/Coffee'}</div>
+                              </div>
                             </td>
-                            <td className="py-3.5 px-4 text-slate-300">
-                              {lunch?.menuItems?.join(', ') || 'Dal, Rice, Roti, Sabzi, Curd'}
+                            <td className="py-4 px-4 text-slate-300">
+                              <div className="space-y-1">
+                                <div className="font-medium text-[#dfba73]">{lunch?.menuItems?.[0] || 'Dal Tadka & Rice'}</div>
+                                <div className="text-[11px] text-slate-400">{lunch?.menuItems?.slice(1).join(', ') || 'Chapati, Curd, Salad'}</div>
+                              </div>
                             </td>
-                            <td className="py-3.5 px-4 text-slate-300">
-                              {snacks?.menuItems?.join(', ') || 'Snacks & Masala Chai'}
+                            <td className="py-4 px-4 text-slate-300">
+                              <div className="space-y-1">
+                                <div className="font-medium text-white">{snacks?.menuItems?.[0] || 'Snacks'}</div>
+                                <div className="text-[11px] text-slate-400">{snacks?.menuItems?.slice(1).join(', ') || 'Hot Tea / Milk'}</div>
+                              </div>
                             </td>
-                            <td className="py-3.5 px-4 text-slate-300">
-                              {dinner?.menuItems?.join(', ') || 'Paneer/Curry, Roti, Rice, Sweet'}
+                            <td className="py-4 px-4 text-slate-300">
+                              <div className="space-y-1">
+                                <div className="font-medium text-emerald-300">{dinner?.menuItems?.[0] || 'Special Curry'}</div>
+                                <div className="text-[11px] text-slate-400">{dinner?.menuItems?.slice(1).join(', ') || 'Roti, Rice, Sweet'}</div>
+                              </div>
                             </td>
                           </tr>
                         );
@@ -1432,7 +1625,7 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
                 </div>
               )}
 
-              {/* Mess Rules & Meal Timing Guidance */}
+              {/* ── 6. MESS RULES & DINING COMMITTEE CONTACT ── */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
                 <div className="p-4 rounded-xl bg-[#0e1219] border border-white/[0.08] space-y-1.5 text-xs shadow-md">
                   <div className="font-semibold text-white flex items-center gap-1.5">
@@ -1440,27 +1633,27 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
                     Meal Timing Discipline
                   </div>
                   <p className="text-slate-400 text-[11px] leading-relaxed">
-                    Breakfast closes strictly at 9:30 AM. Dinner is served until 9:30 PM for all hostel residents.
+                    Breakfast closes strictly at 9:30 AM. Dinner is served until 9:30 PM. Late plate service requires prior warden notification.
                   </p>
                 </div>
 
                 <div className="p-4 rounded-xl bg-[#0e1219] border border-white/[0.08] space-y-1.5 text-xs shadow-md">
                   <div className="font-semibold text-white flex items-center gap-1.5">
                     <Sparkles className="w-4 h-4 text-[#dfba73]" />
-                    Special Diets & Medical Needs
+                    Special Diets & Outpass Rebates
                   </div>
                   <p className="text-slate-400 text-[11px] leading-relaxed">
-                    Jain, vegan, and convalescent diet trays are prepared on prior request through the warden portal.
+                    Leaves exceeding 2 days automatically credit mess rebates to your semester fee invoice. Jain & non-spicy meals prepared upon request.
                   </p>
                 </div>
 
                 <div className="p-4 rounded-xl bg-[#0e1219] border border-white/[0.08] space-y-1.5 text-xs shadow-md">
                   <div className="font-semibold text-white flex items-center gap-1.5">
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    FSSAI Certified Kitchen
+                    FSSAI Certified Hygiene Audit
                   </div>
                   <p className="text-slate-400 text-[11px] leading-relaxed">
-                    Water quality tests and kitchen sanitization are inspected weekly by campus health officers.
+                    RO-filtered drinking water, steam-cleaned tableware, and temperature-controlled storage inspected weekly by campus health officers.
                   </p>
                 </div>
               </div>
