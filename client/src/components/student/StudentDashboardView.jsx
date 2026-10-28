@@ -53,6 +53,16 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
   const [loadingData, setLoadingData] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && sidebarOpen) {
+        setSidebarOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [sidebarOpen]);
+
   // Module Data States
   const [complaints, setComplaints] = useState([]);
   const [leaves, setLeaves] = useState([]);
@@ -308,41 +318,45 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
         </div>
       )}
 
-      {/* ── Mobile Sidebar Toggle Bar ── */}
-      <div className="lg:hidden flex items-center justify-between p-4 bg-[#0e1219] border border-white/[0.08] rounded-xl shadow-lg">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-lg bg-[#121620] border border-white/10 text-slate-300 hover:text-white"
-          >
-            {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-          <div>
-            <div className="text-xs font-semibold text-white uppercase tracking-wider">
-              {navItems.find((n) => n.id === activeTab)?.label}
-            </div>
-            <div className="text-[10px] text-slate-400">Roll: {student?.enrollmentNumber}</div>
-          </div>
-        </div>
-        <button
-          onClick={() => setScanAttendanceModal(true)}
-          className="btn-arch-primary text-xs !py-1.5 !px-3"
-        >
-          <QrCode className="w-3.5 h-3.5" />
-          <span>Scan QR</span>
-        </button>
-      </div>
+      {/* ── Slide-Out Drawer Overlay Backdrop ── */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm animate-fade-in transition-opacity cursor-pointer"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
       {/* ════════════════════════════════════════════════
-          LEFT SIDEBAR COMPONENT
+          SLIDE-OUT RESIDENT MODULES DRAWER
           ════════════════════════════════════════════════ */}
       <aside
-        className={`${
-          sidebarOpen ? 'flex' : 'hidden'
-        } lg:flex flex-col w-full lg:w-72 shrink-0 bg-[#0e1219] border border-white/[0.08] rounded-xl p-5 shadow-2xl space-y-5 self-start`}
+        className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] bg-[#0c0f16] border-r border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.9)] p-5 flex flex-col justify-between overflow-y-auto space-y-5 transition-transform duration-300 ease-in-out ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
       >
+        {/* Drawer Header with Title and Close X */}
+        <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 shrink-0">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-[#c5a059]/15 border border-[#c5a059]/30 flex items-center justify-center text-[#dfba73]">
+              <LayoutDashboard className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-xs font-bold text-white tracking-wide">Resident Modules</div>
+              <div className="text-[10px] text-slate-400 font-mono">Roll: {student?.enrollmentNumber}</div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(false)}
+            className="w-7 h-7 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs"
+            title="Close Menu"
+          >
+            ✕
+          </button>
+        </div>
+
         {/* Student Resident Profile Mini-Card */}
-        <div className="p-4 rounded-lg bg-[#121620] border border-white/[0.08] space-y-3 shadow-inner">
+        <div className="p-4 rounded-lg bg-[#121620] border border-white/[0.08] space-y-3 shadow-inner shrink-0">
           <div className="flex items-center gap-3">
             <div className="relative">
               <div className="w-11 h-11 rounded-lg bg-[#181d28] border border-[#c5a059]/35 text-[#dfba73] font-serif font-bold text-lg flex items-center justify-center shadow-md">
@@ -373,7 +387,7 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
         </div>
 
         {/* Navigation Link List */}
-        <div className="space-y-1.5 flex-1">
+        <div className="space-y-1.5 flex-1 overflow-y-auto">
           <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 px-3 mb-2">
             Student Resident Modules
           </div>
@@ -415,9 +429,12 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
         </div>
 
         {/* Quick Launch Buttons in Sidebar Footer */}
-        <div className="pt-3 border-t border-white/[0.08] space-y-2">
+        <div className="pt-3 border-t border-white/[0.08] space-y-2 shrink-0">
           <button
-            onClick={() => setScanAttendanceModal(true)}
+            onClick={() => {
+              setSidebarOpen(false);
+              setScanAttendanceModal(true);
+            }}
             className="w-full py-2.5 rounded-lg bg-[#c5a059]/10 hover:bg-[#c5a059]/20 border border-[#c5a059]/30 text-[#dfba73] text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
           >
             <Camera className="w-3.5 h-3.5" />
@@ -425,7 +442,10 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
           </button>
 
           <button
-            onClick={() => setComplaintModal(true)}
+            onClick={() => {
+              setSidebarOpen(false);
+              setComplaintModal(true);
+            }}
             className="w-full py-2.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-300 hover:text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5 text-[#dfba73]" />
@@ -435,28 +455,58 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
       </aside>
 
       {/* ════════════════════════════════════════════════
-          RIGHT MAIN CONTENT AREA
+          RIGHT MAIN CONTENT AREA (FULL WIDTH)
           ════════════════════════════════════════════════ */}
-      <main className="flex-1 space-y-6 min-w-0">
-        {/* Top Header Card within Content */}
-        <div className="p-6 rounded-xl bg-[#0e1219] border border-white/[0.08] shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#dfba73]">
-                {navItems.find((n) => n.id === activeTab)?.label}
-              </span>
-              <span className="px-2.5 py-0.5 rounded text-[10px] font-semibold bg-[#c5a059]/10 text-[#dfba73] border border-[#c5a059]/25">
-                Active Resident
-              </span>
+      <main className="w-full space-y-6 min-w-0">
+        {/* Top Header Card within Content with Hamburger Menu */}
+        <div className="p-5 sm:p-6 rounded-xl bg-[#0e1219] border border-white/[0.08] shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <button
+              type="button"
+              onClick={() => setSidebarOpen(true)}
+              className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#121620] hover:bg-[#182030] border border-white/10 hover:border-[#c5a059]/40 text-slate-200 transition-all cursor-pointer shadow-md group active:scale-95 shrink-0"
+              title="Open Resident Modules Menu"
+              aria-label="Open Modules Navigation Menu"
+            >
+              <div className="w-7 h-7 rounded-lg bg-[#c5a059]/15 border border-[#c5a059]/30 text-[#dfba73] flex items-center justify-center group-hover:bg-[#c5a059]/25 transition-all">
+                <Menu className="w-4 h-4" />
+              </div>
+              <div className="text-left">
+                <div className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Modules Menu</div>
+                <div className="text-xs font-bold text-white flex items-center gap-1">
+                  <span>{navItems.find((n) => n.id === activeTab)?.label || 'Overview'}</span>
+                  <ChevronRight className="w-3 h-3 text-[#dfba73]" />
+                </div>
+              </div>
+            </button>
+
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-[#dfba73]">
+                  {navItems.find((n) => n.id === activeTab)?.label}
+                </span>
+                <span className="px-2.5 py-0.5 rounded text-[10px] font-semibold bg-[#c5a059]/10 text-[#dfba73] border border-[#c5a059]/25">
+                  Active Resident
+                </span>
+              </div>
+              <h1 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-tight">
+                Welcome back, {user?.name}
+              </h1>
             </div>
-            <h1 className="font-serif text-2xl font-bold text-white tracking-tight">
-              Welcome back, {user?.name}
-            </h1>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Live Portal Sync</span>
+          <div className="flex items-center gap-3 text-xs text-slate-400 self-end sm:self-center">
+            <button
+              onClick={() => setScanAttendanceModal(true)}
+              className="btn-arch-primary text-xs !py-2 !px-3.5 flex items-center gap-1.5"
+            >
+              <QrCode className="w-3.5 h-3.5" />
+              <span>Scan QR</span>
+            </button>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#121620] border border-white/[0.06]">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Live Portal Sync</span>
+            </div>
           </div>
         </div>
 

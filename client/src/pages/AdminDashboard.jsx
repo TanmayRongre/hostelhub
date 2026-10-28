@@ -168,11 +168,21 @@ export default function AdminDashboard() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-5">
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden p-2 rounded-lg bg-white/[0.05] border border-white/[0.08] text-slate-300 hover:text-white cursor-pointer"
-              aria-label="Toggle admin sidebar"
+              onClick={() => setSidebarOpen(true)}
+              className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[#0e1219] hover:bg-[#141923] border border-white/10 hover:border-[#c5a059]/40 text-slate-200 transition-all cursor-pointer shadow-md group active:scale-95 shrink-0"
+              aria-label="Toggle admin command menu"
+              title="Open Admin Command Menu"
             >
-              {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <div className="w-7 h-7 rounded-lg bg-[#c5a059]/15 border border-[#c5a059]/30 text-[#dfba73] flex items-center justify-center group-hover:bg-[#c5a059]/25 transition-all">
+                <Menu className="w-4 h-4" />
+              </div>
+              <div className="text-left hidden sm:block">
+                <div className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Command Menu</div>
+                <div className="text-xs font-bold text-white flex items-center gap-1">
+                  <span>{navSections.flatMap((s) => s.items).find((n) => n.id === activeTab)?.label || 'Overview'}</span>
+                  <ChevronRight className="w-3 h-3 text-[#dfba73]" />
+                </div>
+              </div>
             </button>
 
             <div className="w-10 h-10 rounded-xl bg-[#c5a059]/10 border border-[#c5a059]/30 flex items-center justify-center text-[#dfba73] shadow-md shadow-[#c5a059]/10">
@@ -215,14 +225,43 @@ export default function AdminDashboard() {
       {/* ════════════════════════════════════════════════
           MAIN ADMIN WORKSPACE LAYOUT
           ════════════════════════════════════════════════ */}
-      <div className="relative flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6">
-        {/* ── LEFT ADMIN SIDEBAR ── */}
+      <div className="relative flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
+        {/* ── Slide-Out Drawer Overlay Backdrop ── */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm animate-fade-in transition-opacity cursor-pointer"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
+        {/* ── LEFT ADMIN SIDEBAR DRAWER ── */}
         <aside
-          className={`${
-            sidebarOpen ? 'flex' : 'hidden'
-          } lg:flex flex-col w-full lg:w-64 shrink-0 bg-[#0e1219] border border-white/[0.08] rounded-xl p-3.5 shadow-xl space-y-4 self-start`}
+          className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#0c0f16] border-r border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.9)] p-4 flex flex-col justify-between overflow-y-auto space-y-4 transition-transform duration-300 ease-in-out ${
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
         >
-          <div className="space-y-4">
+          {/* Drawer Header */}
+          <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 shrink-0">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-[#c5a059]/15 border border-[#c5a059]/30 flex items-center justify-center text-[#dfba73]">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="text-xs font-bold text-white tracking-wide">Command Center Menu</div>
+                <div className="text-[10px] text-slate-400 font-mono">Global Administration</div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSidebarOpen(false)}
+              className="w-7 h-7 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs"
+              title="Close Menu"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="space-y-4 flex-1 overflow-y-auto">
             {navSections.map((sec, sIdx) => (
               <div key={sIdx} className="space-y-1">
                 <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 px-3 pb-1">
@@ -267,13 +306,13 @@ export default function AdminDashboard() {
             ))}
           </div>
 
-          <div className="pt-2 border-t border-white/[0.08] text-center">
+          <div className="pt-2 border-t border-white/[0.08] text-center shrink-0">
             <div className="text-[10px] text-slate-500">HostelHub Admin Suite v2.6</div>
           </div>
         </aside>
 
-        {/* ── RIGHT MAIN CONTENT AREA ── */}
-        <main className="flex-1 space-y-6 min-w-0">
+        {/* ── RIGHT MAIN CONTENT AREA (FULL WIDTH) ── */}
+        <main className="w-full space-y-6 min-w-0">
           {/* Active Tab View */}
           {activeTab === 'overview' && (
             <AdminOverviewSection stats={overviewStats} />
