@@ -318,78 +318,77 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
         </div>
       )}
 
-      {/* ── Slide-Out Drawer Overlay Backdrop ── */}
+      {/* ── Slide-Out Drawer Overlay Backdrop for Mobile Screens ── */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm animate-fade-in transition-opacity cursor-pointer"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm animate-fade-in transition-opacity cursor-pointer lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* ════════════════════════════════════════════════
-          SLIDE-OUT RESIDENT MODULES DRAWER
+          DESKTOP PERMANENT SIDEBAR & MOBILE SLIDE DRAWER
           ════════════════════════════════════════════════ */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] bg-[#0c0f16] border-r border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.9)] p-5 flex flex-col justify-between overflow-y-auto space-y-5 transition-transform duration-300 ease-in-out ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#0c0f16] border-r border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.9)] p-5 flex flex-col justify-between overflow-y-auto space-y-5 transition-transform duration-300 ease-in-out lg:static lg:z-auto lg:w-72 lg:shrink-0 lg:h-fit lg:rounded-2xl lg:border lg:border-white/[0.08] lg:bg-[#0e1219] lg:shadow-xl lg:sticky lg:top-24 lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Drawer Header with Title and Close X */}
-        <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#c5a059]/15 border border-[#c5a059]/30 flex items-center justify-center text-[#dfba73]">
-              <LayoutDashboard className="w-4 h-4" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-white tracking-wide">Resident Modules</div>
-              <div className="text-[10px] text-slate-400 font-mono">Roll: {student?.enrollmentNumber}</div>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => setSidebarOpen(false)}
-            className="w-7 h-7 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs"
-            title="Close Menu"
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* Student Resident Profile Mini-Card */}
-        <div className="p-4 rounded-lg bg-[#121620] border border-white/[0.08] space-y-3 shadow-inner shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <div className="w-11 h-11 rounded-lg bg-[#181d28] border border-[#c5a059]/35 text-[#dfba73] font-serif font-bold text-lg flex items-center justify-center shadow-md">
-                {user?.name?.charAt(0) || 'S'}
+        {/* Resident Dossier & Avatar */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-[#c5a059]/15 border border-[#c5a059]/30 flex items-center justify-center text-[#dfba73]">
+                <LayoutDashboard className="w-4 h-4" />
               </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#121620]" />
+              <div>
+                <div className="text-xs font-bold text-white tracking-wide">Resident Desk</div>
+                <div className="text-[10px] text-slate-400 font-mono">Roll: {student?.enrollmentNumber || 'CS2026-088'}</div>
+              </div>
             </div>
-            <div className="overflow-hidden">
-              <div className="text-sm font-bold text-white truncate">{user?.name}</div>
-              <div className="text-[11px] font-mono text-[#dfba73]/85 uppercase tracking-wide">{student?.enrollmentNumber || 'CS2026-088'}</div>
-            </div>
+            {/* Close button only on mobile */}
+            <button
+              type="button"
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden w-7 h-7 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs"
+              title="Close Menu"
+            >
+              ✕
+            </button>
           </div>
 
-          <div className="p-2.5 rounded-md bg-[#090b10]/80 border border-white/[0.06] text-[11px] space-y-1.5">
-            <div className="flex items-center justify-between text-slate-400">
-              <span>Allotment:</span>
-              <strong className="text-white">Room #{student?.room?.roomNumber || '101'}</strong>
+          {/* Student Profile Card */}
+          <div className="p-3.5 rounded-xl bg-[#121620] border border-white/[0.08] space-y-3 shadow-inner">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="w-10 h-10 rounded-lg bg-[#181d28] border border-[#c5a059]/40 text-[#dfba73] font-serif font-bold text-base flex items-center justify-center shadow-md">
+                  {user?.name?.charAt(0) || 'S'}
+                </div>
+                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#121620]" />
+              </div>
+              <div className="overflow-hidden">
+                <div className="text-xs font-bold text-white truncate">{user?.name}</div>
+                <div className="text-[10px] font-mono text-[#dfba73]/90 uppercase tracking-wide truncate">{student?.hostel?.name || 'Campus Residence'}</div>
+              </div>
             </div>
-            <div className="flex items-center justify-between text-slate-400">
-              <span>Bed:</span>
-              <strong className="text-[#dfba73]">Bed {student?.bed?.bedNumber || 'B-1'} ({student?.room?.type || 'AC'})</strong>
-            </div>
-            <div className="flex items-center justify-between text-slate-400">
-              <span>Complex:</span>
-              <span className="text-slate-300 truncate max-w-[120px]">{student?.hostel?.name || 'Block A'}</span>
+
+            <div className="grid grid-cols-2 gap-2 pt-1 border-t border-white/[0.06] text-[11px]">
+              <div className="p-2 rounded-lg bg-[#090b10] border border-white/[0.05]">
+                <div className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">Room</div>
+                <div className="font-bold text-white">#{student?.room?.roomNumber || '101'}</div>
+              </div>
+              <div className="p-2 rounded-lg bg-[#090b10] border border-white/[0.05]">
+                <div className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">Bed Allotment</div>
+                <div className="font-bold text-[#dfba73] truncate">Bed {student?.bed?.bedNumber || 'B-1'}</div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Navigation Link List */}
-        <div className="space-y-1.5 flex-1 overflow-y-auto">
+        <div className="space-y-1 flex-1">
           <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 px-3 mb-2">
-            Student Resident Modules
+            Resident Modules
           </div>
 
           {navItems.map((item) => {
@@ -401,14 +400,14 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
                   setActiveTab(item.id);
                   setSidebarOpen(false);
                 }}
-                className={`w-full px-3.5 py-2.5 rounded-lg text-xs font-semibold flex items-center justify-between transition-all cursor-pointer group ${
+                className={`w-full px-3 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-all cursor-pointer group ${
                   active
                     ? 'bg-[#c5a059] text-[#090b10] font-bold shadow-md shadow-[#c5a059]/20'
                     : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <span className={`${active ? 'text-[#090b10]' : 'text-slate-400 group-hover:text-[#dfba73] group-hover:scale-105'} transition-all`}>
+                <div className="flex items-center gap-2.5">
+                  <span className={`${active ? 'text-[#090b10]' : 'text-slate-400 group-hover:text-[#dfba73] group-hover:scale-110'} transition-all`}>
                     {item.icon}
                   </span>
                   <span>{item.label}</span>
@@ -416,7 +415,7 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
 
                 {item.badge && (
                   <span
-                    className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
+                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${
                       active ? 'bg-[#090b10]/20 text-[#090b10]' : item.badgeColor || 'bg-white/5 text-slate-300'
                     }`}
                   >
@@ -429,13 +428,13 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
         </div>
 
         {/* Quick Launch Buttons in Sidebar Footer */}
-        <div className="pt-3 border-t border-white/[0.08] space-y-2 shrink-0">
+        <div className="pt-3 border-t border-white/[0.08] space-y-2">
           <button
             onClick={() => {
               setSidebarOpen(false);
               setScanAttendanceModal(true);
             }}
-            className="w-full py-2.5 rounded-lg bg-[#c5a059]/10 hover:bg-[#c5a059]/20 border border-[#c5a059]/30 text-[#dfba73] text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+            className="w-full py-2.5 rounded-xl bg-[#c5a059]/10 hover:bg-[#c5a059]/20 border border-[#c5a059]/30 text-[#dfba73] text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm hover:scale-[1.02] active:scale-95"
           >
             <Camera className="w-3.5 h-3.5" />
             <span>Scan Attendance</span>
@@ -446,7 +445,7 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
               setSidebarOpen(false);
               setComplaintModal(true);
             }}
-            className="w-full py-2.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-300 hover:text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer"
+            className="w-full py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-300 hover:text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-[1.02] active:scale-95"
           >
             <Plus className="w-3.5 h-3.5 text-[#dfba73]" />
             <span>Raise Complaint</span>
@@ -455,55 +454,62 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
       </aside>
 
       {/* ════════════════════════════════════════════════
-          RIGHT MAIN CONTENT AREA (FULL WIDTH)
+          RIGHT MAIN CONTENT AREA
           ════════════════════════════════════════════════ */}
-      <main className="w-full space-y-6 min-w-0">
-        {/* Top Header Card within Content with Hamburger Menu */}
-        <div className="p-5 sm:p-6 rounded-xl bg-[#0e1219] border border-white/[0.08] shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(true)}
-              className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#121620] hover:bg-[#182030] border border-white/10 hover:border-[#c5a059]/40 text-slate-200 transition-all cursor-pointer shadow-md group active:scale-95 shrink-0"
-              title="Open Resident Modules Menu"
-              aria-label="Open Modules Navigation Menu"
-            >
-              <div className="w-7 h-7 rounded-lg bg-[#c5a059]/15 border border-[#c5a059]/30 text-[#dfba73] flex items-center justify-center group-hover:bg-[#c5a059]/25 transition-all">
-                <Menu className="w-4 h-4" />
-              </div>
-              <div className="text-left">
-                <div className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Modules Menu</div>
-                <div className="text-xs font-bold text-white flex items-center gap-1">
-                  <span>{navItems.find((n) => n.id === activeTab)?.label || 'Overview'}</span>
-                  <ChevronRight className="w-3 h-3 text-[#dfba73]" />
-                </div>
-              </div>
-            </button>
+      <main className="flex-1 space-y-6 min-w-0">
+        {/* Mobile Navigation Trigger Bar (Shown only on small screens) */}
+        <div className="lg:hidden p-3 rounded-xl bg-[#0e1219] border border-white/[0.08] flex items-center justify-between shadow-md">
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#121620] border border-white/10 text-slate-200 text-xs font-semibold"
+          >
+            <Menu className="w-4 h-4 text-[#dfba73]" />
+            <span>Menu: {navItems.find((n) => n.id === activeTab)?.label || 'Overview'}</span>
+          </button>
+          <span className="text-[11px] text-[#dfba73] font-mono">Room #{student?.room?.roomNumber || '101'}</span>
+        </div>
 
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-[#dfba73]">
-                  {navItems.find((n) => n.id === activeTab)?.label}
-                </span>
-                <span className="px-2.5 py-0.5 rounded text-[10px] font-semibold bg-[#c5a059]/10 text-[#dfba73] border border-[#c5a059]/25">
-                  Active Resident
-                </span>
-              </div>
-              <h1 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-tight">
-                Welcome back, {user?.name}
-              </h1>
+        {/* Top Header Card within Content */}
+        <div className="p-6 rounded-2xl bg-[#0e1219] border border-white/[0.08] shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden">
+          {/* Subtle Ambient Gold Glow in background */}
+          <div className="absolute -top-16 -right-16 w-48 h-48 bg-[#c5a059]/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="space-y-2 relative">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30 uppercase tracking-wider flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Active Resident
+              </span>
+              <span className="text-xs text-slate-400">
+                • {navItems.find((n) => n.id === activeTab)?.label}
+              </span>
+            </div>
+            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              Welcome back, {user?.name}
+            </h1>
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-300 pt-0.5">
+              <span className="px-2.5 py-1 rounded-md bg-[#121620] border border-white/[0.06]">
+                Room <strong className="text-white">#{student?.room?.roomNumber || '101'}</strong> ({student?.room?.type || 'AC'} Deluxe)
+              </span>
+              <span className="px-2.5 py-1 rounded-md bg-[#121620] border border-white/[0.06] text-[#dfba73]">
+                Bed <strong className="font-semibold">{student?.bed?.bedNumber || 'B-1'}</strong>
+              </span>
+              <span className="px-2.5 py-1 rounded-md bg-[#121620] border border-white/[0.06] text-slate-400">
+                {student?.hostel?.name || 'Block A Campus Residence'}
+              </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 text-xs text-slate-400 self-end sm:self-center">
+          <div className="flex items-center gap-3 relative self-start md:self-center shrink-0">
             <button
               onClick={() => setScanAttendanceModal(true)}
-              className="btn-arch-primary text-xs !py-2 !px-3.5 flex items-center gap-1.5"
+              className="btn-arch-primary !py-2.5 !px-4 text-xs flex items-center gap-2 shadow-lg shadow-[#c5a059]/20 hover:scale-[1.02] active:scale-95"
             >
-              <QrCode className="w-3.5 h-3.5" />
-              <span>Scan QR</span>
+              <QrCode className="w-4 h-4" />
+              <span>Scan QR Attendance</span>
             </button>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#121620] border border-white/[0.06]">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-[#121620] border border-white/[0.06] text-xs text-slate-400">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span>Live Portal Sync</span>
             </div>
@@ -636,47 +642,200 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
         {/* ── TAB 2: SCAN ATTENDANCE ── */}
         {activeTab === 'attendance' && (
           <div className="space-y-6 animate-fade-in">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-xl bg-[#0e1219] border border-white/[0.08] shadow-xl">
-              <div>
-                <h2 className="font-serif text-xl font-bold text-white flex items-center gap-2">
-                  <QrCode className="w-5 h-5 text-[#dfba73]" />
-                  Smart Hostel Attendance System
+            {/* Live Terminal Hero Banner */}
+            <div className="p-6 sm:p-7 rounded-2xl bg-[#0e1219] border border-white/[0.08] shadow-2xl relative overflow-hidden flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+              <div className="absolute -top-12 -right-12 w-64 h-64 bg-[#c5a059]/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="space-y-2 relative max-w-xl">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30 uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Terminal Active • Night Roll 20:30 – 22:30 IST
+                  </span>
+                </div>
+                <h2 className="font-serif text-2xl font-bold text-white flex items-center gap-2.5">
+                  <QrCode className="w-6 h-6 text-[#dfba73]" />
+                  Smart Hostel Biometric & QR Attendance
                 </h2>
-                <p className="text-xs text-slate-400 mt-0.5">Mark your daily resident presence using the smart QR scanner terminal.</p>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Authenticate your nightly residential presence by scanning the warden desk's dynamic circular QR token or visiting the floor terminal kiosk.
+                </p>
               </div>
-              <button
-                onClick={() => setScanAttendanceModal(true)}
-                className="btn-arch-primary text-xs !py-2.5 !px-5"
-              >
-                <Camera className="w-4 h-4" />
-                <span>Launch QR Scanner Terminal</span>
-              </button>
+
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 relative shrink-0">
+                <button
+                  onClick={() => setScanAttendanceModal(true)}
+                  className="btn-arch-primary text-xs !py-3 !px-5 flex items-center justify-center gap-2 shadow-xl shadow-[#c5a059]/20 hover:scale-[1.02] active:scale-95"
+                >
+                  <Camera className="w-4 h-4" />
+                  <span>Launch QR Scanner Terminal</span>
+                </button>
+              </div>
             </div>
 
-            {/* Attendance History Log */}
-            <div className="p-6 rounded-xl bg-[#0e1219] border border-white/[0.08] space-y-4 shadow-xl">
-              <h3 className="text-xs font-semibold text-[#dfba73] uppercase tracking-wider">Recent Attendance Verification Log</h3>
-              <div className="space-y-2.5">
+            {/* 3 Telemetry Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Card 1: Today's Roll Call */}
+              <div className="p-5 rounded-xl bg-[#0e1219] border border-white/[0.08] shadow-lg flex flex-col justify-between space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Tonight's Roll Call</span>
+                  <Clock className="w-4 h-4 text-[#dfba73]" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    {isPresentToday ? (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        VERIFIED PRESENT
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                        <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                        PENDING SCAN
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-slate-400 mt-2">
+                    {isPresentToday
+                      ? 'Presence recorded successfully. No further action needed tonight.'
+                      : 'Scan before 10:30 PM IST to avoid automatic absent notification.'}
+                  </p>
+                </div>
+                <div className="pt-2 border-t border-white/[0.05] text-[10px] text-slate-500 font-mono">
+                  Session window: 08:30 PM - 10:30 PM IST
+                </div>
+              </div>
+
+              {/* Card 2: 30-Day Compliance */}
+              <div className="p-5 rounded-xl bg-[#0e1219] border border-white/[0.08] shadow-lg flex flex-col justify-between space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Attendance Compliance</span>
+                  <Activity className="w-4 h-4 text-emerald-400" />
+                </div>
+                <div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-serif text-3xl font-bold text-white">96.8%</span>
+                    <span className="text-xs text-emerald-400 font-semibold">14-Day Streak</span>
+                  </div>
+                  {/* Progress bar */}
+                  <div className="w-full bg-[#181d28] rounded-full h-1.5 mt-2.5 overflow-hidden">
+                    <div className="bg-gradient-to-r from-[#c5a059] to-[#dfba73] h-1.5 rounded-full" style={{ width: '96.8%' }} />
+                  </div>
+                  <p className="text-[11px] text-slate-400 mt-2">
+                    Fully eligible for semester exam hall-ticket & gate outpasses.
+                  </p>
+                </div>
+                <div className="pt-2 border-t border-white/[0.05] text-[10px] text-slate-500 font-mono">
+                  Disciplinary warnings: 0 / 3
+                </div>
+              </div>
+
+              {/* Card 3: Checkpoint Kiosk */}
+              <div className="p-5 rounded-xl bg-[#0e1219] border border-white/[0.08] shadow-lg flex flex-col justify-between space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Assigned Checkpoint</span>
+                  <MapPin className="w-4 h-4 text-[#dfba73]" />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-white">
+                    {student?.hostel?.name || 'Block A'} Ground Foyer
+                  </div>
+                  <div className="text-[11px] font-mono text-[#dfba73] mt-1">
+                    Terminal Node #01 · Room #{student?.room?.roomNumber || '101'}
+                  </div>
+                  <p className="text-[11px] text-slate-400 mt-2">
+                    Hardware Status: <strong className="text-emerald-400">ONLINE 99.9%</strong>
+                  </p>
+                </div>
+                <div className="pt-2 border-t border-white/[0.05] text-[10px] text-slate-500 font-mono">
+                  SHA-256 Dynamic QR Token Match
+                </div>
+              </div>
+            </div>
+
+            {/* Attendance History Log & Verification Timeline */}
+            <div className="p-6 rounded-2xl bg-[#0e1219] border border-white/[0.08] space-y-5 shadow-2xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
+                <div>
+                  <h3 className="font-serif text-lg font-bold text-white flex items-center gap-2">
+                    <span>Recent Attendance Verification Log</span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#121620] text-[#dfba73] border border-white/10 font-sans">
+                      {attendanceRecords.length} Records
+                    </span>
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Immutable digital presence trail stamped with hardware timestamp and security hash.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setScanAttendanceModal(true)}
+                  className="btn-arch-secondary text-xs !py-2 !px-3.5 flex items-center gap-1.5 self-start sm:self-center"
+                >
+                  <Camera className="w-3.5 h-3.5 text-[#dfba73]" />
+                  <span>Verify Now</span>
+                </button>
+              </div>
+
+              <div className="space-y-3">
                 {attendanceRecords.length > 0 ? (
                   attendanceRecords.map((att) => (
-                    <div key={att._id} className="p-4 rounded-lg bg-[#121620] border border-white/[0.06] flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/25">
-                          <CheckCircle2 className="w-4 h-4" />
+                    <div
+                      key={att._id}
+                      className="p-4 rounded-xl bg-[#121620] hover:bg-[#161c28] border border-white/[0.06] hover:border-[#c5a059]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all"
+                    >
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-10 h-10 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                          <CheckCircle2 className="w-5 h-5" />
                         </div>
                         <div>
-                          <div className="font-semibold text-white">{new Date(att.date).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</div>
-                          <div className="text-[11px] text-slate-400">Time: {new Date(att.date).toLocaleTimeString()} · {att.remarks || 'QR Verified'}</div>
+                          <div className="font-semibold text-white text-xs sm:text-sm">
+                            {new Date(att.date).toLocaleDateString('en-IN', {
+                              weekday: 'long',
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                            })}
+                          </div>
+                          <div className="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">
+                            <span className="font-mono text-slate-300">
+                              Time: {new Date(att.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                            <span>•</span>
+                            <span className="text-[#dfba73]">{att.remarks || 'QR Code Terminal Stamped'}</span>
+                          </div>
                         </div>
                       </div>
-                      <span className="px-2.5 py-1 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-semibold uppercase text-[10px]">
-                        {att.status}
-                      </span>
+
+                      <div className="flex items-center gap-3 self-end sm:self-center">
+                        <span className="px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold uppercase text-[10px] tracking-wider">
+                          {att.status || 'PRESENT'}
+                        </span>
+                        <span className="text-[10px] text-slate-500 font-mono hidden md:inline">
+                          ID: #{att._id?.slice(-6) || 'AUTH'}
+                        </span>
+                      </div>
                     </div>
                   ))
                 ) : (
-                  <div className="p-8 text-center text-xs text-slate-500">
-                    No attendance entries yet. Click "Launch QR Scanner Terminal" to mark presence today.
+                  <div className="py-12 px-6 rounded-xl bg-[#121620]/60 border border-dashed border-white/10 text-center space-y-4">
+                    <div className="w-14 h-14 rounded-2xl bg-[#c5a059]/10 border border-[#c5a059]/25 text-[#dfba73] flex items-center justify-center mx-auto shadow-inner">
+                      <QrCode className="w-7 h-7" />
+                    </div>
+                    <div className="max-w-md mx-auto space-y-1">
+                      <h4 className="text-sm font-bold text-white">Ready for Tonight's Attendance Roll-Call</h4>
+                      <p className="text-xs text-slate-400 leading-relaxed">
+                        No check-in recorded for today yet. Launch the camera scanner to read the warden's rotating QR pass or enter the session key.
+                      </p>
+                    </div>
+                    <div className="pt-2">
+                      <button
+                        onClick={() => setScanAttendanceModal(true)}
+                        className="btn-arch-primary text-xs !py-2.5 !px-5 inline-flex items-center gap-2 shadow-lg shadow-[#c5a059]/20"
+                      >
+                        <Camera className="w-4 h-4" />
+                        <span>Launch QR Scanner Terminal</span>
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
