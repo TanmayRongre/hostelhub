@@ -1,91 +1,90 @@
 import React, { useState } from 'react';
 import useInView from '../../hooks/useInView';
 import {
-  Building2,
-  ClipboardList,
-  UtensilsCrossed,
-  KeyRound,
-  Activity,
-  CreditCard,
-  Megaphone,
+  QrCode,
   Wrench,
+  KeyRound,
+  Users,
+  UtensilsCrossed,
+  CreditCard,
+  Building2,
+  Bell,
   Grid,
   ArrowUpRight,
-  ShieldCheck,
 } from 'lucide-react';
 
 const FEATURES = [
   {
     number: '01',
-    category: 'Allocation Engine',
-    title: 'Room Allotment & Bed Registry',
-    tag: 'Automated Matrix',
-    desc: 'Automated room allocation matrices based on branch, year, gender, and preference across all residential blocks.',
+    category: 'Daily Presence',
+    title: 'QR Attendance',
+    tag: 'Quick Roll-Call',
+    desc: 'Mark daily attendance effortlessly with dynamic QR scanning. Instant check-in records for students and zero-proxy night audits for wardens.',
+    icon: <QrCode className="w-5 h-5" />,
+    stats: 'Instant Verification',
+  },
+  {
+    number: '02',
+    category: 'Repairs & Help',
+    title: 'Room Complaints',
+    tag: 'Fast Resolution',
+    desc: 'Raise maintenance tickets for electrical, plumbing, Wi-Fi, or cleaning with photos. Track technician updates in real time until fixed.',
+    icon: <Wrench className="w-5 h-5" />,
+    stats: 'Live Status Tracking',
+  },
+  {
+    number: '03',
+    category: 'Gate Clearance',
+    title: 'Leave & Outpass',
+    tag: 'Digital Approval',
+    desc: 'Apply for home visits, weekend leaves, and day passes online. Get quick warden approvals with digital security gate logs.',
+    icon: <KeyRound className="w-5 h-5" />,
+    stats: 'Paperless Outpass',
+  },
+  {
+    number: '04',
+    category: 'Guest Entry',
+    title: 'Visitor Passes',
+    tag: 'Gate Security',
+    desc: 'Pre-register visiting parents and guests. Security guards verify digital visitor badges and log entry and exit times safely.',
+    icon: <Users className="w-5 h-5" />,
+    stats: 'Safe Visitor Records',
+  },
+  {
+    number: '05',
+    category: 'Food & Dining',
+    title: 'Daily Mess Menu',
+    tag: '4 Meals Daily',
+    desc: 'Check live daily menus for breakfast, lunch, snacks, and dinner. View meal schedules, timing alerts, and share dining feedback.',
+    icon: <UtensilsCrossed className="w-5 h-5" />,
+    stats: 'Weekly Meal Schedule',
+  },
+  {
+    number: '06',
+    category: 'Billing & Dues',
+    title: 'Fee Payments',
+    tag: 'Instant Receipt',
+    desc: 'View semester hostel and mess charges, pay pending dues securely online, and download tax-ready payment invoices instantly.',
+    icon: <CreditCard className="w-5 h-5" />,
+    stats: 'Secure Online Portal',
+  },
+  {
+    number: '07',
+    category: 'Beds & Rooms',
+    title: 'Room Allotment',
+    tag: 'Smart Allocation',
+    desc: 'Smooth room and bed distribution across blocks. Students can view room numbers, floor details, and roommate profiles anytime.',
     icon: <Building2 className="w-5 h-5" />,
     stats: 'Multi-Block Capacity',
   },
   {
-    number: '02',
-    category: 'Grievance Desk',
-    title: 'Maintenance & Grievance Tickets',
-    tag: 'SLA Tracking',
-    desc: 'Students file tickets with photographs; wardens track SLA response and resolve with verifiable completion logs.',
-    icon: <ClipboardList className="w-5 h-5" />,
-    stats: 'Live Technician Logs',
-  },
-  {
-    number: '03',
-    category: 'Dietary Operations',
-    title: 'Nutritional Mess & Dining Schedules',
-    tag: 'Weekly Cycle',
-    desc: 'Weekly 4-meal cycle schedules, dietary feedback channels, and real-time meal timing notifications.',
-    icon: <UtensilsCrossed className="w-5 h-5" />,
-    stats: '4-Meal Daily Cycle',
-  },
-  {
-    number: '04',
-    category: 'Security Protocols',
-    title: 'Digital Gate-Pass & Outstation Leaves',
-    tag: 'Paperless Leave',
-    desc: 'End-to-end paperless leave workflows — instant parent SMS verification, warden signatures, and security gate logs.',
-    icon: <KeyRound className="w-5 h-5" />,
-    stats: 'Two-Way Security Sync',
-  },
-  {
-    number: '05',
-    category: 'Audit & Roll Call',
-    title: 'Automated QR Night Attendance',
-    tag: 'Geo-Verification',
-    desc: 'Floor-by-floor geolocation-verified QR roll calls with instant absent alerts to resident wardens.',
-    icon: <Activity className="w-5 h-5" />,
-    stats: 'Zero-Proxy Audit',
-  },
-  {
-    number: '06',
-    category: 'Treasury & Ledger',
-    title: 'Institutional Fee Accounting',
-    tag: 'Instant Receipt',
-    desc: 'Digital semester fee collection, instant downloadable tax receipts, dues reconciliation, and caution deposits.',
-    icon: <CreditCard className="w-5 h-5" />,
-    stats: 'Automated Clearance',
-  },
-  {
-    number: '07',
-    category: 'Broadcast Gateway',
-    title: 'Instant Broadcast Dispatcher',
-    tag: 'Direct Dispatch',
-    desc: 'Segmented announcements pushed directly to resident portals — block-specific or entire campus-wide.',
-    icon: <Megaphone className="w-5 h-5" />,
-    stats: 'Sub-Second Broadcast',
-  },
-  {
     number: '08',
-    category: 'Facility Management',
-    title: 'Campus Facility Operations',
-    tag: 'Preventive Care',
-    desc: 'Centralized preventive maintenance tracking for high-speed Wi-Fi, plumbing, electrical fixtures, and gym amenities.',
-    icon: <Wrench className="w-5 h-5" />,
-    stats: '24/7 Operations Hub',
+    category: 'Announcements',
+    title: 'Notice Board',
+    tag: 'Hostel Circulars',
+    desc: 'Stay informed with instant hostel announcements, event circulars, curfew updates, and emergency notices from the warden desk.',
+    icon: <Bell className="w-5 h-5" />,
+    stats: 'Real-Time Broadcast',
   },
 ];
 
@@ -101,13 +100,13 @@ export default function FeaturesSection() {
         <div ref={headRef} className={`lp-header-center reveal ${headIn ? 'in-view' : ''}`}>
           <div className="lp-tag">
             <Grid className="w-3.5 h-3.5 text-[#dfba73]" />
-            <span>Operational Capabilities</span>
+            <span>All Core Modules</span>
           </div>
           <h2 className="lp-heading">
-            Enterprise Architecture for <span>Modern Residences</span>
+            Everything You Need for <span>Hostel Living</span>
           </h2>
           <p className="lp-sub">
-            From algorithmic room allotments to QR night audits — every campus living operation digitized with precision.
+            From attendance and complaints to leaves, visitors, mess menus, and fees — all handled seamlessly in one place.
           </p>
         </div>
 
