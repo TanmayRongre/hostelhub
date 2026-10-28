@@ -53,8 +53,9 @@ const getMesses = async (req, res, next) => {
 
     let menus = await Mess.find(filter).populate('hostel', 'name code');
 
-    // Auto-seed if database has no mess records
-    if (menus.length === 0 && Object.keys(filter).length === 0) {
+    // Auto-seed or refresh if database has incomplete mess records (< 28 entries for 7 days)
+    if (menus.length < 28 && Object.keys(filter).length === 0) {
+      await Mess.deleteMany({});
       await Mess.insertMany(defaultWeeklyMenu);
       menus = await Mess.find().populate('hostel', 'name code');
     }

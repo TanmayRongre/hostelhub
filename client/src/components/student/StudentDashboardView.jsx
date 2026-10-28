@@ -1185,8 +1185,39 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
             { dayOfWeek: 'Sunday', mealType: 'Dinner', timing: '7:30 PM - 9:30 PM', menuItems: ['Light Khichdi / Veg Pulao', 'Kadhi', 'Papad', 'Fruit Salad'] },
           ];
 
-          const allWeeklyData = messMenu.length > 0 ? messMenu : fallbackWeeklyMenu;
-          const currentDayMeals = allWeeklyData.filter((m) => m.dayOfWeek === selectedMessDay);
+          // Master function to guarantee complete, diverse, chef-curated dishes for every day and meal
+          const getMealForDayAndType = (day, mealType) => {
+            const normalizedDay = (day || '').trim().toLowerCase();
+            const normalizedType = (mealType || '').trim().toLowerCase();
+
+            // 1. If database has a valid item for this exact day & type, use it
+            if (Array.isArray(messMenu) && messMenu.length > 0) {
+              const dbItem = messMenu.find(
+                (m) => (m.dayOfWeek || '').trim().toLowerCase() === normalizedDay &&
+                       (m.mealType || '').trim().toLowerCase() === normalizedType
+              );
+              if (dbItem && Array.isArray(dbItem.menuItems) && dbItem.menuItems.length > 0) {
+                return dbItem;
+              }
+            }
+
+            // 2. Otherwise provide the rich, curated master dishes for that day & meal
+            const fallbackItem = fallbackWeeklyMenu.find(
+              (m) => m.dayOfWeek.toLowerCase() === normalizedDay &&
+                     m.mealType.toLowerCase() === normalizedType
+            );
+            if (fallbackItem) {
+              return fallbackItem;
+            }
+
+            // 3. Fallback default
+            return {
+              dayOfWeek: day,
+              mealType: mealType,
+              timing: mealType === 'Breakfast' ? '7:30 AM - 9:30 AM' : mealType === 'Lunch' ? '12:30 PM - 2:30 PM' : mealType === 'Snacks' ? '5:00 PM - 6:00 PM' : '7:30 PM - 9:30 PM',
+              menuItems: ['Chef Special Nutritious Platter', 'Accompaniments', 'Fresh Beverage'],
+            };
+          };
 
           const getMealMeta = (type) => {
             switch (type) {
@@ -1427,12 +1458,7 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
                     selectedMealFilter === 'all' ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'
                   }`}>
                     {mealsToDisplay.map((type) => {
-                      const meal = currentDayMeals.find((m) => m.mealType === type) || {
-                        dayOfWeek: selectedMessDay,
-                        mealType: type,
-                        timing: type === 'Breakfast' ? '7:30 AM - 9:30 AM' : type === 'Lunch' ? '12:30 PM - 2:30 PM' : type === 'Snacks' ? '5:00 PM - 6:00 PM' : '7:30 PM - 9:30 PM',
-                        menuItems: ['Chef Special Nutritious Platter', 'Accompaniments', 'Fresh Beverage'],
-                      };
+                      const meal = getMealForDayAndType(selectedMessDay, type);
                       const meta = getMealMeta(type);
                       const isCurrentLive = selectedMessDay === todayDayName && currentLiveMeal === type;
                       const ratingKey = `${selectedMessDay}_${type}`;
@@ -1568,13 +1594,12 @@ export default function StudentDashboardView({ student, user, onRefresh, refresh
                     </thead>
                     <tbody className="divide-y divide-white/[0.06]">
                       {daysOfWeek.map((day) => {
-                        const dayMeals = allWeeklyData.filter((m) => m.dayOfWeek === day);
                         const isToday = day === todayDayName;
 
-                        const bFast = dayMeals.find((m) => m.mealType === 'Breakfast');
-                        const lunch = dayMeals.find((m) => m.mealType === 'Lunch');
-                        const snacks = dayMeals.find((m) => m.mealType === 'Snacks');
-                        const dinner = dayMeals.find((m) => m.mealType === 'Dinner');
+                        const bFast = getMealForDayAndType(day, 'Breakfast');
+                        const lunch = getMealForDayAndType(day, 'Lunch');
+                        const snacks = getMealForDayAndType(day, 'Snacks');
+                        const dinner = getMealForDayAndType(day, 'Dinner');
 
                         return (
                           <tr

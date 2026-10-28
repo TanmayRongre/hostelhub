@@ -174,28 +174,8 @@ const seedInitialData = async () => {
         ]);
         console.log('🌱 Seeded sample notices');
 
-        // Seed Sample Mess Menu
-        await Mess.create([
-          {
-            dayOfWeek: 'Monday',
-            mealType: 'Breakfast',
-            timing: '7:30 AM - 9:30 AM',
-            menuItems: ['Idli Sambar', 'Coconut Chutney', 'Boiled Eggs', 'Tea / Coffee / Milk'],
-          },
-          {
-            dayOfWeek: 'Monday',
-            mealType: 'Lunch',
-            timing: '12:30 PM - 2:30 PM',
-            menuItems: ['Dal Tadka', 'Jeera Rice', 'Roti', 'Aloo Gobi', 'Curd', 'Salad'],
-          },
-          {
-            dayOfWeek: 'Monday',
-            mealType: 'Dinner',
-            timing: '7:30 PM - 9:30 PM',
-            menuItems: ['Paneer Masala', 'Tandoori Roti', 'Pulao', 'Gulab Jamun'],
-          },
-        ]);
-        console.log('🌱 Seeded sample mess schedule');
+        // Note: Full 28-meal weekly schedule is seeded with comprehensive menus by messController
+        console.log('🌱 Sample notices seeded');
       }
     }
   } catch (err) {
