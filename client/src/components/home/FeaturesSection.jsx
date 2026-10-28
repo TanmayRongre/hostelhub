@@ -7,7 +7,7 @@ import {
   Users,
   UtensilsCrossed,
   CreditCard,
-  Building2,
+  FileDown,
   Bell,
   Grid,
   ArrowUpRight,
@@ -70,12 +70,12 @@ const FEATURES = [
   },
   {
     number: '07',
-    category: 'Beds & Rooms',
-    title: 'Room Allotment',
-    tag: 'Smart Allocation',
-    desc: 'Smooth room and bed distribution across blocks. Students can view room numbers, floor details, and roommate profiles anytime.',
-    icon: <Building2 className="w-5 h-5" />,
-    stats: 'Multi-Block Capacity',
+    category: 'Data & Analytics',
+    title: 'Reports & Export',
+    tag: 'PDF & Excel',
+    desc: 'Generate and export comprehensive hostel audit reports — attendance logs, fee ledgers, visitor history, and complaint resolutions.',
+    icon: <FileDown className="w-5 h-5" />,
+    stats: 'Instant PDF / Excel',
   },
   {
     number: '08',
@@ -106,7 +106,7 @@ export default function FeaturesSection() {
             Everything You Need for <span>Hostel Living</span>
           </h2>
           <p className="lp-sub">
-            From attendance and complaints to leaves, visitors, mess menus, and fees — all handled seamlessly in one place.
+            From attendance and complaints to leaves, visitors, mess menus, and reports — all handled seamlessly in one place.
           </p>
         </div>
 
