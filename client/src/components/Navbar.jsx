@@ -140,6 +140,9 @@ export default function Navbar() {
     { type: 'hash', hash: '#workflow', label: 'Workflow' },
     { type: 'hash', hash: '#impact', label: 'Impact' },
     { type: 'link', to: '/contact', label: 'Contact', icon: <Mail className="w-3.5 h-3.5" /> },
+  ];
+
+  const drawerNavItems = [
     ...(isAuthenticated
       ? [
           {
@@ -150,32 +153,33 @@ export default function Navbar() {
           },
         ]
       : []),
+    ...navItems,
   ];
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#090b10]/90 border-b border-white/[0.08] shadow-[0_10px_30px_rgba(0,0,0,0.8)] transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
         {/* ── Brand ── */}
         <Link
           to="/"
           onClick={(e) => handleNavClick(e, '#overview')}
-          className="flex items-center gap-3 text-decoration-none group flex-shrink-0"
+          className="flex items-center gap-2.5 sm:gap-3 text-decoration-none group flex-shrink-0"
         >
           <div className="w-8 h-8 rounded-lg bg-[#121620] border border-[#c5a059]/40 flex items-center justify-center shadow-md group-hover:border-[#dfba73] group-hover:shadow-[0_0_15px_rgba(197,160,89,0.3)] transition-all flex-shrink-0">
             <Building2 className="w-4 h-4 text-[#dfba73]" />
           </div>
           <div>
-            <div className="font-serif font-bold text-lg tracking-tight text-white leading-none">
+            <div className="font-serif font-bold text-base sm:text-lg tracking-tight text-white leading-none">
               Hostel<span className="text-[#dfba73]">Hub</span>
             </div>
-            <div className="text-[9px] text-[#94a3b8] font-sans font-medium tracking-[0.16em] uppercase mt-0.5">
+            <div className="text-[9px] text-[#94a3b8] font-sans font-medium tracking-[0.16em] uppercase mt-0.5 hidden sm:block">
               Campus Residence System
             </div>
           </div>
         </Link>
 
         {/* ── Desktop Center Navigation Links ── */}
-        <nav className="hidden lg:flex items-center gap-1 bg-[#121620]/60 p-1 rounded-full border border-white/[0.06]">
+        <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-[#121620]/60 p-1 rounded-full border border-white/[0.06] flex-shrink-0">
           {navItems.map((item) => {
             if (item.type === 'hash') {
               const isSectionActive =
@@ -186,7 +190,7 @@ export default function Navbar() {
                   key={item.hash}
                   href={'/' + item.hash}
                   onClick={(e) => handleNavClick(e, item.hash)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
+                  className={`px-2.5 xl:px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
                     isSectionActive
                       ? 'bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
@@ -202,7 +206,7 @@ export default function Navbar() {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
+                className={`flex items-center gap-1.5 px-2.5 xl:px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
                   isPageActive
                     ? 'bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30 shadow-sm'
                     : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
@@ -291,17 +295,17 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <Link
                 to="/login"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-slate-200 hover:text-white text-xs font-medium transition-all"
+                className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-slate-200 hover:text-white text-xs font-medium transition-all"
               >
                 <LogIn className="w-3.5 h-3.5 opacity-70" />
                 <span>Sign In</span>
               </Link>
               <Link
                 to="/register"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#c5a059] hover:bg-[#dfba73] text-[#090b10] text-xs font-semibold shadow-sm transition-all"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#c5a059] hover:bg-[#dfba73] text-[#090b10] text-xs font-semibold shadow-sm transition-all"
               >
                 <UserPlus className="w-3.5 h-3.5" />
                 <span>Register</span>
@@ -324,7 +328,7 @@ export default function Navbar() {
       {/* ── Mobile Drawer ── */}
       {mobileOpen && (
         <div className="lg:hidden bg-[#0c0f16]/98 backdrop-blur-2xl border-b border-white/[0.08] px-4 py-4 space-y-1.5 shadow-2xl animate-in slide-in-from-top-2 duration-200">
-          {navItems.map((item) => {
+          {drawerNavItems.map((item) => {
             if (item.type === 'hash') {
               const isSectionActive =
                 location.pathname === '/' && activeSection === item.hash.replace('#', '');

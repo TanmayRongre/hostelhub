@@ -16,7 +16,7 @@ const ROLES = [
     label: 'Resident Portal',
     title: 'Student',
     tagline: 'Resident Self-Service Dashboard',
-    desc: 'Directly manage daily hostel life from your personal dashboard — scan nightly attendance, file room complaints, apply for leave, pay fees, and view mess menus.',
+    desc: 'Manage your daily hostel life — QR attendance, room complaints, leave outpass, fee payments, and mess menus.',
     accessLevel: 'TIER 01 // RESIDENT AUTH',
     features: [
       'QR Attendance',
@@ -38,7 +38,7 @@ const ROLES = [
     label: 'Residence Desk',
     title: 'Warden',
     tagline: 'Floor & Block Operations Desk',
-    desc: 'Supervise daily hostel operations — generate attendance QR codes, review leave applications, resolve student complaints, approve visitors, and broadcast circulars.',
+    desc: 'Supervise floor & hostel operations — attendance QR roll-calls, student leave approvals, complaint resolutions, and notices.',
     accessLevel: 'TIER 02 // SUPERVISORY DESK',
     features: [
       'Attendance QR',
@@ -60,7 +60,7 @@ const ROLES = [
     label: 'Institutional Command',
     title: 'Admin',
     tagline: 'Global Governance & System Oversight',
-    desc: 'Complete campus control — allocate hostel blocks and rooms, manage student admissions, track fee payments, assign wardens, and inspect audit logs.',
+    desc: 'Campus-wide administrative control — allocate rooms, manage student admissions, track fees, and inspect security audits.',
     accessLevel: 'TIER 03 // ROOT GOVERNANCE',
     features: [
       'Hostel Inventory',
@@ -274,7 +274,7 @@ export default function RolesSection() {
                   {/* Top Meta Bar */}
                   <div className="roles-card-topbar">
                     <span className={`roles-sys-code ${role.theme}`}>{role.code}</span>
-                    <span className="roles-sys-stage">STAGE {role.stepNumber} OF 03</span>
+                    <span className="roles-sys-stage hidden sm:inline">STAGE {role.stepNumber} OF 03</span>
                   </div>
 
                   {/* Title & Tagline */}
@@ -286,13 +286,13 @@ export default function RolesSection() {
                   <p className="roles-card-desc">{role.desc}</p>
                 </div>
 
-                {/* Bottom Left: Pure CSS CTA and Auth Badge */}
-                <div className="roles-card-action-box">
+                {/* Bottom Left on Desktop, hidden on mobile */}
+                <div className="roles-card-action-box hidden md:flex">
                   <Link to={role.link} className={`roles-card-cta-btn ${role.theme}`}>
                     <span>{role.cta}</span>
                     <span className="roles-cta-arrow">→</span>
                   </Link>
-                  <div className="roles-card-access-chip">
+                  <div className="roles-card-access-chip hidden sm:inline-flex">
                     <span className={`status-dot ${role.theme}`} />
                     <span>{role.accessLevel}</span>
                   </div>
@@ -301,7 +301,7 @@ export default function RolesSection() {
 
               {/* Right Column: Workflows Matrix (Zero SVGs, Monospaced Protocol Indices) */}
               <div className="roles-card-right-col">
-                <div className="roles-card-right-header">
+                <div className="roles-card-right-header hidden sm:flex">
                   <div className="roles-workflows-title">
                     <span className="roles-title-text">SYSTEM CAPABILITIES</span>
                     <span className="roles-title-sub">REAL-TIME PROTOCOLS</span>
@@ -323,7 +323,15 @@ export default function RolesSection() {
                   ))}
                 </div>
 
-                <div className="roles-card-footer-strip">
+                {/* Mobile-only CTA button at bottom of card */}
+                <div className="roles-card-mobile-action md:hidden mt-2">
+                  <Link to={role.link} className={`roles-card-cta-btn ${role.theme} w-full justify-center`}>
+                    <span>{role.cta}</span>
+                    <span className="roles-cta-arrow">→</span>
+                  </Link>
+                </div>
+
+                <div className="roles-card-footer-strip hidden md:flex">
                   <div className="roles-footer-meta">
                     <span className="roles-footer-bullet">•</span>
                     <span>ENTERPRISE RESIDENCE OS</span>

@@ -630,23 +630,131 @@
 }
 
 @media (max-width: 900px) {
+  .roles-pinned-section {
+    padding: 12px 14px 20px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  .roles-nav-pills {
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 12px;
+    gap: 6px;
+    padding: 4px;
+    box-sizing: border-box;
+  }
+
+  .roles-nav-pill {
+    padding: 5px 10px;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
   .roles-card-deck {
-    height: 520px;
+    height: 440px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .roles-deck-card {
     grid-template-columns: 1fr;
-    padding: 22px 20px;
-    gap: 18px;
-    overflow-y: auto;
+    padding: 18px 16px 16px;
+    gap: 8px;
+    overflow: hidden !important; /* No individual inner scrolling */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  /* Hide unnecessary metadata and redundant text on mobile */
+  .roles-sys-stage,
+  .roles-card-access-chip,
+  .roles-card-right-header,
+  .roles-card-footer-strip {
+    display: none !important;
+  }
+
+  /* Hide the desktop action box in middle of card on mobile */
+  .roles-card-action-box {
+    display: none !important;
+  }
+
+  /* Show mobile action CTA at bottom of card */
+  .roles-card-mobile-action {
+    display: block !important;
+    width: 100%;
+    margin-top: auto;
+  }
+
+  .roles-card-topbar {
+    margin-bottom: 6px;
+  }
+
+  .roles-card-headline {
+    font-size: 24px;
+    margin: 0 0 2px;
+    line-height: 1.1;
+  }
+
+  .roles-card-tagline {
+    font-size: 9.5px;
+    margin-bottom: 4px;
   }
 
   .roles-card-desc {
-    margin-bottom: 12px;
+    font-size: 12px;
+    line-height: 1.45;
+    margin-bottom: 4px;
   }
 
-  .roles-card-body h3 {
-    font-size: 24px;
+  .roles-card-right-col {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  .roles-protocols-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 8px;
+    margin-bottom: 4px;
+  }
+
+  /* Display only top 4 protocols on mobile to fit cleanly */
+  .roles-protocols-grid .roles-protocol-item:nth-child(n+5) {
+    display: none !important;
+  }
+
+  .roles-protocol-item {
+    padding: 7px 9px;
+    gap: 8px;
+    border-radius: 8px;
+  }
+
+  .roles-protocol-num {
+    font-size: 9.5px;
+    padding: 2px 5px;
+  }
+
+  .roles-protocol-text {
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .roles-card-cta-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 14px;
+    font-size: 12.5px;
   }
 }
 
