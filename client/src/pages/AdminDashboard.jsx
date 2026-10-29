@@ -145,63 +145,60 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-[#090b10] text-slate-100 font-sans flex flex-col relative">
-      {/* Ambient Architectural Gradient Glow */}
-      <div className="absolute top-0 inset-x-0 h-96 bg-[radial-gradient(ellipse_80%_40%_at_50%_-10%,rgba(197,160,89,0.06),transparent)] pointer-events-none" />
-
+    <div className="min-h-[calc(100vh-64px)] bg-[#f5f6f0] text-[#15232a] font-sans flex flex-col relative">
       {/* Toast Feedback */}
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-sm font-medium border animate-slide-up ${
+          className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 text-sm font-medium border animate-slide-up ${
             toast.type === 'error'
-              ? 'bg-rose-950/95 text-rose-200 border-rose-700/60'
-              : 'bg-[#0e1219] text-[#dfba73] border-[#c5a059]/40'
+              ? 'bg-rose-50 text-rose-800 border-rose-200'
+              : 'bg-white text-[#15232a] border-[#d6e0d7]'
           }`}
         >
-          {toast.type === 'error' ? <AlertCircle className="w-4 h-4 text-rose-400" /> : <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+          {toast.type === 'error' ? <AlertCircle className="w-4 h-4 text-rose-600" /> : <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
           <span>{toast.msg}</span>
         </div>
       )}
 
       {/* ── TOP BREADCRUMB & TELEMETRY BAR ── */}
       <div className="relative max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#d6e0d7] pb-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#c5a059]/10 border border-[#c5a059]/30 flex items-center justify-center text-[#dfba73] shadow-md shadow-[#c5a059]/10">
+            <div className="w-10 h-10 rounded-xl bg-[#e8f1f5] border border-[#bce4f6] flex items-center justify-center text-[#128bc0] shadow-xs">
               <ShieldCheck className="w-5 h-5" />
             </div>
 
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-bold font-serif text-white tracking-tight">Admin Command Center</h1>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-sans font-bold bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30 uppercase tracking-wider">
+                <h1 className="text-xl font-bold font-serif text-[#15232a] tracking-tight">Admin Command Center</h1>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-sans font-bold bg-[#e8f1f5] text-[#128bc0] border border-[#bce4f6] uppercase tracking-wider">
                   Global Control
                 </span>
-                <span className="text-xs text-slate-400">
+                <span className="text-xs text-[#586d65]">
                   • {navSections.flatMap((s) => s.items).find((n) => n.id === activeTab)?.label || 'Overview'}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">System oversight, resident rosters, financial audits, and security telemetry.</p>
+              <p className="text-xs text-[#586d65] mt-0.5">System oversight, resident rosters, financial audits, and security telemetry.</p>
             </div>
           </div>
 
           {/* Right Telemetry Pills */}
           <div className="flex items-center gap-3 text-xs">
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-[11px]">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-[11px]">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>Telemetry Online</span>
             </div>
 
-            <div className="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#0e1219] border border-white/[0.08] text-slate-400 text-[11px] font-mono">
+            <div className="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full bg-white border border-[#d6e0d7] text-[#586d65] text-[11px] font-mono shadow-xs">
               <span>DB: {healthData?.database?.latencyMs || 3}ms</span>
             </div>
 
             <button
               onClick={loadAdminData}
               title="Refresh All Metrics"
-              className="p-2 rounded-lg bg-[#0e1219] hover:bg-white/[0.05] border border-white/[0.08] text-slate-300 hover:text-white transition-all cursor-pointer"
+              className="p-2 rounded-xl bg-white hover:bg-[#eef1ea] border border-[#d6e0d7] text-[#15232a] transition-all cursor-pointer shadow-xs"
             >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-[#dfba73]' : ''}`} />
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-[#128bc0]' : ''}`} />
             </button>
           </div>
         </div>
@@ -214,33 +211,33 @@ export default function AdminDashboard() {
         {/* ── Slide-Out Drawer Overlay Backdrop (Mobile Only) ── */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm animate-fade-in transition-opacity cursor-pointer lg:hidden"
+            className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm animate-fade-in transition-opacity cursor-pointer lg:hidden"
             onClick={() => setSidebarOpen(false)}
           />
         )}
 
         {/* ── LEFT ADMIN SIDEBAR (PERMANENT ON DESKTOP, DRAWER ON MOBILE) ── */}
         <aside
-          className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#0c0f16] border-r border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.9)] p-5 flex flex-col justify-between overflow-y-auto space-y-4 transition-transform duration-300 ease-in-out lg:static lg:z-auto lg:w-72 lg:shrink-0 lg:h-fit lg:rounded-2xl lg:border lg:border-white/[0.08] lg:bg-[#0e1219] lg:shadow-xl lg:sticky lg:top-24 lg:translate-x-0 ${
+          className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-white border-r border-[#d6e0d7] shadow-[0_20px_50px_rgba(21,35,42,0.08)] p-5 flex flex-col justify-between overflow-y-auto space-y-4 transition-transform duration-300 ease-in-out lg:static lg:z-auto lg:w-72 lg:shrink-0 lg:h-fit lg:rounded-2xl lg:border lg:border-[#d6e0d7] lg:bg-white lg:shadow-[0_4px_20px_rgba(21,35,42,0.04)] lg:sticky lg:top-24 lg:translate-x-0 ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
           {/* Admin Profile & Telemetry Card */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+            <div className="flex items-center justify-between pb-3 border-b border-[#e5ebe4]">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#c5a059]/15 border border-[#c5a059]/30 flex items-center justify-center text-[#dfba73]">
+                <div className="w-8 h-8 rounded-lg bg-[#e8f1f5] border border-[#bce4f6] flex items-center justify-center text-[#128bc0]">
                   <ShieldCheck className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-white tracking-wide">Command Center</div>
-                  <div className="text-[10px] text-slate-400 font-mono">Institutional Root</div>
+                  <div className="text-xs font-bold text-[#15232a] tracking-wide">Command Center</div>
+                  <div className="text-[10px] text-[#586d65] font-mono">Institutional Root</div>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setSidebarOpen(false)}
-                className="lg:hidden w-7 h-7 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs"
+                className="lg:hidden w-7 h-7 rounded-lg bg-[#f5f6f0] hover:bg-[#eef1ea] border border-[#d6e0d7] text-[#586d65] hover:text-[#15232a] flex items-center justify-center transition-colors cursor-pointer text-xs"
                 title="Close Menu"
               >
                 ✕
@@ -248,28 +245,28 @@ export default function AdminDashboard() {
             </div>
 
             {/* Profile Card */}
-            <div className="p-3.5 rounded-xl bg-[#121620] border border-white/[0.08] space-y-3 shadow-inner">
+            <div className="p-3.5 rounded-xl bg-[#fbfbf9] border border-[#dce5dc] space-y-3 shadow-xs">
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <div className="w-10 h-10 rounded-lg bg-[#181d28] border border-[#c5a059]/40 text-[#dfba73] font-serif font-bold text-base flex items-center justify-center shadow-md">
+                  <div className="w-10 h-10 rounded-lg bg-[#e8f1f5] border border-[#bce4f6] text-[#128bc0] font-serif font-bold text-base flex items-center justify-center shadow-xs">
                     {user?.name?.charAt(0) || 'A'}
                   </div>
-                  <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#121620]" />
+                  <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white" />
                 </div>
                 <div className="overflow-hidden">
-                  <div className="text-xs font-bold text-white truncate">{user?.name || 'Super Administrator'}</div>
-                  <div className="text-[10px] font-mono text-[#dfba73]/90 uppercase tracking-wide truncate">Main Campus HQ</div>
+                  <div className="text-xs font-bold text-[#15232a] truncate">{user?.name || 'Super Administrator'}</div>
+                  <div className="text-[10px] font-mono text-[#128bc0] uppercase tracking-wide truncate">Main Campus HQ</div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 pt-1 border-t border-white/[0.06] text-[11px]">
-                <div className="p-2 rounded-lg bg-[#090b10] border border-white/[0.05]">
-                  <div className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">Latency</div>
-                  <div className="font-bold text-emerald-400">{healthData?.database?.latencyMs || 3}ms</div>
+              <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[#e5ebe4] text-[11px]">
+                <div className="p-2 rounded-lg bg-white border border-[#dce5dc]">
+                  <div className="text-[9px] uppercase tracking-wider text-[#586d65] font-semibold">Latency</div>
+                  <div className="font-bold text-emerald-600">{healthData?.database?.latencyMs || 3}ms</div>
                 </div>
-                <div className="p-2 rounded-lg bg-[#090b10] border border-white/[0.05]">
-                  <div className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">Security</div>
-                  <div className="font-bold text-[#dfba73] truncate">Zero-Trust</div>
+                <div className="p-2 rounded-lg bg-white border border-[#dce5dc]">
+                  <div className="text-[9px] uppercase tracking-wider text-[#586d65] font-semibold">Security</div>
+                  <div className="font-bold text-[#128bc0] truncate">Zero-Trust</div>
                 </div>
               </div>
             </div>
@@ -278,7 +275,7 @@ export default function AdminDashboard() {
           <div className="space-y-4 flex-1 overflow-y-auto">
             {navSections.map((sec, sIdx) => (
               <div key={sIdx} className="space-y-1">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 px-3 pb-1">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[#586d65] px-3 pb-1">
                   {sec.group}
                 </div>
 
@@ -293,12 +290,12 @@ export default function AdminDashboard() {
                       }}
                       className={`w-full px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-all cursor-pointer group ${
                         active
-                          ? 'bg-[#c5a059] text-[#090b10] font-bold shadow-md shadow-[#c5a059]/20'
-                          : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                          ? 'bg-[#152c36] text-white font-bold shadow-md'
+                          : 'text-[#586d65] hover:text-[#15232a] hover:bg-[#eef1ea]'
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <span className={`${active ? 'text-[#090b10]' : 'text-[#dfba73] group-hover:scale-105'} transition-transform`}>
+                        <span className={`${active ? 'text-white' : 'text-[#128bc0] group-hover:scale-105'} transition-transform`}>
                           {item.icon}
                         </span>
                         <span>{item.label}</span>
@@ -307,7 +304,7 @@ export default function AdminDashboard() {
                       {item.badge !== undefined && item.badge !== null && (
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                            active ? 'bg-[#090b10]/20 text-[#090b10]' : item.badgeColor || 'bg-white/[0.06] text-slate-300'
+                            active ? 'bg-white/20 text-white' : item.badgeColor || 'bg-[#e8f1f5] text-[#128bc0]'
                           }`}
                         >
                           {item.badge}
@@ -320,24 +317,24 @@ export default function AdminDashboard() {
             ))}
           </div>
 
-          <div className="pt-2 border-t border-white/[0.08] text-center shrink-0">
-            <div className="text-[10px] text-slate-500">HostelHub Admin Suite v2.6</div>
+          <div className="pt-2 border-t border-[#dce5dc] text-center shrink-0">
+            <div className="text-[10px] text-[#586d65]">HostelHub Admin Suite v2.6</div>
           </div>
         </aside>
 
         {/* ── RIGHT MAIN CONTENT AREA (BESIDE PERMANENT SIDEBAR) ── */}
-        <main className="flex-1 space-y-6 min-w-0">
+        <main className="flex-1 space-y-6 min-w-0 font-sans">
           {/* Mobile Navigation Trigger Bar (Shown only on small screens) */}
-          <div className="lg:hidden p-3 rounded-xl bg-[#0e1219] border border-white/[0.08] flex items-center justify-between shadow-md">
+          <div className="lg:hidden p-3 rounded-2xl bg-white border border-[#d6e0d7] flex items-center justify-between shadow-[0_4px_20px_rgba(21,35,42,0.04)]">
             <button
               type="button"
               onClick={() => setSidebarOpen(true)}
-              className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-[#121620] border border-white/10 text-slate-200 text-xs font-semibold"
+              className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#fbfbf9] border border-[#d6e0d7] text-[#15232a] text-xs font-semibold"
             >
-              <Menu className="w-4 h-4 text-[#dfba73]" />
+              <Menu className="w-4 h-4 text-[#128bc0]" />
               <span>Menu: {navSections.flatMap((s) => s.items).find((n) => n.id === activeTab)?.label || 'Overview'}</span>
             </button>
-            <span className="text-[11px] text-[#34d399] font-mono">Live Sync</span>
+            <span className="text-[11px] text-emerald-700 font-mono font-bold">Live Sync</span>
           </div>
           {/* Active Tab View */}
           {activeTab === 'overview' && (

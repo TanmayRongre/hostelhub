@@ -1,7 +1,7 @@
 /* ===================================================
-   HOME PAGE SHELL — Professional Architectural Redesign
-   Fonts: Playfair Display (Editorial) + Inter (UI/Body)
-   Palette: Deep Obsidian (#090b10) · Champagne Gold (#c5a059, #dfba73) · Platinum Slate (#94a3b8)
+   HOME PAGE SHELL — Flaxan Labs Linen Paper Aesthetic
+   Fonts: Manrope (Body/UI/Headings) + Caveat (Hand)
+   Palette: Warm Paper (#f5f6f0) · Deep Ink (#15232a) · Sage Slate (#586d65) · Craft Blue (#128bc0)
    =================================================== */
 
 .home-page {
@@ -10,8 +10,9 @@
   height: calc(100vh - 64px);
   min-height: 580px;
   overflow: hidden;
-  font-family: "Inter", sans-serif;
-  background-color: #090b10;
+  font-family: "Manrope", sans-serif;
+  background-color: #f5f6f0;
+  color: #15232a;
 }
 
 /* ── Hero Video Background ── */
@@ -24,25 +25,41 @@
   object-position: center;
   z-index: 0;
   pointer-events: none;
-  filter: contrast(1.05) brightness(0.65);
+  opacity: 0.38;
+  filter: contrast(1.05) saturate(0.9);
 }
 
-/* ── Deep Luxury Obsidian & Bronze Gradient Overlay ── */
+/* ── Flaxan Warm Paper Linen Overlay ── */
 .home-hero-overlay {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(to bottom,
-      rgba(9, 11, 16, 0.78) 0%,
-      rgba(9, 11, 16, 0.45) 45%,
-      rgba(9, 11, 16, 0.88) 100%
-    ),
+  background: 
     linear-gradient(to right,
-      rgba(9, 11, 16, 0.94) 0%,
-      rgba(9, 11, 16, 0.60) 45%,
-      rgba(9, 11, 16, 0.35) 100%
+      rgba(245, 246, 240, 0.94) 0%,
+      rgba(245, 246, 240, 0.82) 48%,
+      rgba(245, 246, 240, 0.40) 80%,
+      rgba(245, 246, 240, 0.25) 100%
+    ),
+    linear-gradient(to bottom,
+      rgba(245, 246, 240, 0.85) 0%,
+      transparent 35%,
+      rgba(245, 246, 240, 0.95) 100%
     );
   z-index: 1;
+  pointer-events: none;
+}
+
+.home-hero-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(214, 224, 215, 0.35) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(214, 224, 215, 0.35) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 85%);
+  pointer-events: none;
 }
 
 /* ===================================================
@@ -68,134 +85,153 @@
   justify-content: space-between;
 }
 
-/* Right column: floating cards pinned to bottom */
-.home-right-col {
-  width: 560px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
-.home-cards-row {
-  display: flex;
-  gap: 16px;
-  align-items: flex-end;
-}
-
-/* ===================================================
-   HERO CONTENT
-   =================================================== */
 .home-hero-content {
   flex-shrink: 1;
   min-height: 0;
-  max-width: 620px;
+  max-width: 780px;
 }
 
 .home-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 12px;
-  border-radius: 6px;
-  background: rgba(197, 160, 89, 0.10);
-  border: 1px solid rgba(197, 160, 89, 0.28);
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: #ffffff;
+  border: 1px solid #d6e0d7;
   font-size: 11px;
   font-weight: 600;
-  color: #dfba73;
+  color: #2a3d39;
   letter-spacing: 0.08em;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   text-transform: uppercase;
-  font-family: "Inter", sans-serif;
+  font-family: ui-monospace, SFMono-Regular, "IBM Plex Mono", Menlo, Consolas, monospace;
+  box-shadow: 0 2px 8px rgba(21, 35, 42, 0.04);
 }
 
 .home-hero-content h1 {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: clamp(34px, 4.4vw, 64px);
-  font-weight: 700;
-  color: #ffffff;
+  font-family: "Manrope", sans-serif;
+  font-size: clamp(38px, 4.4vw, 62px);
+  font-weight: 600;
+  color: #15232a;
   line-height: 1.08;
-  letter-spacing: -0.025em;
-  margin: 0 0 16px;
-  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+  letter-spacing: -0.04em;
+  margin: 0 0 18px;
+  text-shadow: none;
 }
 
 .home-hero-content h1 span {
-  background: linear-gradient(135deg, #ffffff 0%, #e8d7b3 40%, #c5a059 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-family: inherit;
+  color: #128bc0;
   font-style: italic;
-  font-weight: 800;
+  font-weight: 600;
+  background: none;
+  -webkit-text-fill-color: initial;
 }
 
 .home-hero-desc {
-  font-size: 14px;
-  color: #a1a1aa;
+  font-family: "Manrope", sans-serif;
+  font-size: 16px;
+  color: #586d65;
   line-height: 1.7;
-  margin-bottom: 24px;
-  max-width: 460px;
+  margin-bottom: 30px;
+  max-width: 620px;
   font-weight: 400;
 }
 
-/* ── CTA buttons ── */
+/* ── Flaxan Action Buttons ── */
 .home-cta-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   flex-wrap: wrap;
 }
 
 .home-cta-primary {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 22px;
-  border-radius: 8px;
-  background: #c5a059;
-  color: #090b10;
-  font-size: 13.5px;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 6px 6px 6px 22px;
+  border-radius: 100px;
+  background: #152c36;
+  color: #ffffff;
+  font-size: 14px;
   font-weight: 600;
-  font-family: "Inter", sans-serif;
-  letter-spacing: 0.01em;
-  border: 1px solid #dfba73;
+  font-family: "Manrope", sans-serif;
+  letter-spacing: -0.01em;
   cursor: pointer;
   text-decoration: none;
-  box-shadow: 0 4px 18px rgba(197, 160, 89, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.35);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px rgba(21, 44, 54, 0.18);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .home-cta-primary:hover {
-  background: #dfba73;
+  background: #128bc0;
   transform: translateY(-2px);
-  box-shadow: 0 8px 26px rgba(197, 160, 89, 0.40);
-  color: #090b10;
+  box-shadow: 0 8px 24px rgba(18, 139, 192, 0.28);
+  color: #ffffff;
+}
+
+.home-cta-icon-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-cta-primary:hover .home-cta-icon-circle {
+  transform: rotate(45deg);
 }
 
 .home-cta-secondary {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 22px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #e2e8f0;
-  font-size: 13.5px;
-  font-weight: 500;
-  font-family: "Inter", sans-serif;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 6px 6px 6px 20px;
+  border-radius: 100px;
+  background: #d8effa;
+  border: 1px solid #bce4f6;
+  color: #163a49;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Manrope", sans-serif;
+  letter-spacing: -0.01em;
   cursor: pointer;
   text-decoration: none;
-  backdrop-filter: blur(12px);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .home-cta-secondary:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
+  background: #c3e5f5;
+  color: #112d39;
   transform: translateY(-2px);
 }
+
+.home-cta-secondary-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(18, 139, 192, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #128bc0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-cta-secondary:hover .home-cta-secondary-circle {
+  transform: rotate(45deg);
+}
+
 
 /* ── Stats ── */
 .home-stats-row {
@@ -204,7 +240,7 @@
   gap: 24px;
   margin-top: 24px;
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid #dce5dc;
 }
 
 .home-stat-item {
@@ -213,28 +249,28 @@
 }
 
 .home-stat-value {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 26px;
+  font-family: "Manrope", sans-serif;
+  font-size: 27px;
   font-weight: 700;
-  color: #f1f3f7;
+  color: #15232a;
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.035em;
 }
 
 .home-stat-label {
-  font-family: "Inter", sans-serif;
+  font-family: ui-monospace, SFMono-Regular, "IBM Plex Mono", Menlo, Consolas, monospace;
   font-size: 11px;
-  color: #71717a;
+  color: #586d65;
   font-weight: 500;
-  margin-top: 4px;
-  letter-spacing: 0.04em;
+  margin-top: 5px;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .home-stat-sep {
   width: 1px;
-  height: 30px;
-  background: rgba(255, 255, 255, 0.08);
+  height: 28px;
+  background: #d6e0d7;
 }
 
 /* ===================================================
@@ -243,35 +279,33 @@
 .home-card-left {
   flex: 1;
   min-width: 0;
-  background: rgba(18, 22, 32, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 12px;
-  padding: 22px 22px;
-  box-shadow:
-    0 20px 48px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  background: #ffffff;
+  border: 1px solid #d6e0d7;
+  border-radius: 20px;
+  padding: 24px 22px;
+  box-shadow: 0 4px 24px rgba(21, 35, 42, 0.05);
   animation: cardUp 0.55s 0.12s cubic-bezier(0.22, 1, 0.36, 1) both;
-  transition: border-color 0.25s, transform 0.25s;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
 }
 
 .home-card-left:hover {
-  border-color: rgba(197, 160, 89, 0.35);
+  border-color: #128bc0;
   transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(18, 139, 192, 0.10);
 }
 
 .home-card-left h3 {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Manrope", sans-serif;
   font-size: 16px;
-  font-weight: 700;
-  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #15232a;
   margin: 0 0 6px;
 }
 
 .home-card-left p {
-  font-size: 12px;
-  color: #71717a;
+  font-size: 12.5px;
+  color: #586d65;
   line-height: 1.6;
   margin: 0 0 16px;
 }
@@ -283,21 +317,22 @@
 }
 
 .home-stat-big {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Manrope", sans-serif;
   font-size: 30px;
   font-weight: 700;
-  color: #dfba73;
+  color: #128bc0;
   line-height: 1;
+  letter-spacing: -0.03em;
 }
 
 .home-stat-tiny {
-  font-family: "Inter", sans-serif;
+  font-family: ui-monospace, SFMono-Regular, "IBM Plex Mono", Menlo, Consolas, monospace;
   font-size: 10px;
-  color: #71717a;
-  font-weight: 600;
+  color: #586d65;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-top: 3px;
+  letter-spacing: 0.07em;
+  margin-top: 4px;
 }
 
 .home-card-avatars {
@@ -308,38 +343,37 @@
 .home-avatar {
   width: 28px;
   height: 28px;
-  border-radius: 6px;
-  border: 1.5px solid #090b10;
+  border-radius: 9999px;
+  border: 2px solid #ffffff;
   margin-left: -6px;
   font-size: 10px;
   font-weight: 700;
-  color: #090b10;
+  color: #ffffff;
+  background: #152c36;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(21, 35, 42, 0.12);
 }
 .home-avatar:first-child { margin-left: 0; }
 
 .home-card-right {
   flex: 1;
   min-width: 0;
-  background: rgba(18, 22, 32, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 12px;
-  padding: 22px 22px;
-  box-shadow:
-    0 20px 48px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  background: #ffffff;
+  border: 1px solid #d6e0d7;
+  border-radius: 20px;
+  padding: 24px 22px;
+  box-shadow: 0 4px 24px rgba(21, 35, 42, 0.05);
   animation: cardUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-  transition: border-color 0.25s, transform 0.25s;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
 }
 
 .home-card-right:hover {
-  border-color: rgba(197, 160, 89, 0.35);
+  border-color: #128bc0;
   transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(18, 139, 192, 0.10);
 }
 
 @keyframes cardUp {
@@ -349,15 +383,15 @@
 
 /* Sharp architectural go-btn */
 .home-card-go-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: rgba(197, 160, 89, 0.15);
-  border: 1px solid rgba(197, 160, 89, 0.35);
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  background: #e8f1f5;
+  border: 1px solid #bce4f6;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #dfba73;
+  color: #128bc0;
   font-size: 13px;
   cursor: pointer;
   flex-shrink: 0;
@@ -366,10 +400,10 @@
 }
 
 .home-card-go-btn:hover {
-  background: #c5a059;
-  color: #090b10;
-  border-color: #dfba73;
-  transform: translateX(2px);
+  background: #128bc0;
+  color: #ffffff;
+  border-color: #128bc0;
+  transform: translateY(-1px) rotate(45deg);
 }
 
 .home-card-header {
@@ -380,10 +414,11 @@
 }
 
 .home-card-title {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 15px;
-  font-weight: 700;
-  color: #ffffff;
+  font-family: "Manrope", sans-serif;
+  font-size: 15.5px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #15232a;
   margin: 0 0 4px;
 }
 
@@ -392,7 +427,7 @@
   align-items: center;
   gap: 5px;
   font-size: 11px;
-  color: #71717a;
+  color: #586d65;
 }
 
 .home-card-badge {
@@ -400,28 +435,29 @@
   align-items: center;
   gap: 5px;
   padding: 3px 8px;
-  border-radius: 4px;
-  font-size: 10.5px;
+  border-radius: 9999px;
+  font-size: 10px;
   font-weight: 600;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  color: #34d399;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
   margin-bottom: 10px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
+  font-family: ui-monospace, SFMono-Regular, "IBM Plex Mono", Menlo, Consolas, monospace;
 }
 
 .home-card-desc {
-  font-size: 11.5px;
-  color: #a1a1aa;
+  font-size: 12px;
+  color: #586d65;
   line-height: 1.6;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .home-card-specs {
   display: flex;
   align-items: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid #dce5dc;
   padding-top: 12px;
 }
 
@@ -430,20 +466,20 @@
   align-items: center;
   gap: 5px;
   font-size: 11px;
-  color: #a1a1aa;
+  color: #586d65;
   font-weight: 500;
   flex: 1;
 }
 
 .home-card-spec svg, .home-card-spec i {
-  color: #dfba73;
+  color: #128bc0;
   font-size: 13px;
 }
 
 .home-card-spec-sep {
   width: 1px;
   height: 14px;
-  background: rgba(255, 255, 255, 0.08);
+  background: #dce5dc;
   margin: 0 6px;
 }
 
@@ -526,11 +562,13 @@
 
 /* ===================================================
    CONTACT & INQUIRY PAGE
+/* ===================================================
+   CONTACT PAGE — Flaxan Warm Linen & Institutional Desk
    =================================================== */
 .contact-page {
   min-height: calc(100vh - 64px);
-  background: #090b10;
-  font-family: "Inter", sans-serif;
+  background: #f5f6f0;
+  font-family: "Manrope", sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -549,17 +587,17 @@
 }
 
 .contact-header h1 {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Manrope", sans-serif;
   font-size: clamp(30px, 4vw, 46px);
   font-weight: 700;
-  color: #ffffff;
+  color: #15232a;
   margin: 0 0 12px;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.035em;
 }
 
 .contact-header p {
   font-size: 14px;
-  color: #94a3b8;
+  color: #586d65;
   max-width: 520px;
   margin: 0 auto;
   line-height: 1.7;
@@ -572,28 +610,27 @@
 }
 
 .contact-info-card {
-  background: rgba(18, 22, 32, 0.75);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #d6e0d7;
+  border-radius: 20px;
   padding: 36px 30px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 16px 40px -10px rgba(21, 35, 42, 0.06);
 }
 
 .contact-info-card h2 {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Manrope", sans-serif;
   font-size: 22px;
   font-weight: 700;
-  color: #ffffff;
+  color: #15232a;
   margin: 0 0 8px;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.025em;
 }
 
 .contact-info-card p {
   font-size: 13px;
-  color: #94a3b8;
+  color: #586d65;
   line-height: 1.65;
   margin: 0 0 28px;
 }
@@ -613,13 +650,13 @@
 .contact-info-icon {
   width: 36px;
   height: 36px;
-  border-radius: 8px;
-  background: rgba(197, 160, 89, 0.12);
-  border: 1px solid rgba(197, 160, 89, 0.28);
+  border-radius: 9999px;
+  background: #e8f1f5;
+  border: 1px solid #bce4f6;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #dfba73;
+  color: #128bc0;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -628,13 +665,13 @@
   display: block;
   font-size: 12.5px;
   font-weight: 600;
-  color: #ffffff;
+  color: #15232a;
   margin-bottom: 2px;
 }
 
 .contact-info-text span {
   font-size: 12px;
-  color: #94a3b8;
+  color: #586d65;
   line-height: 1.5;
 }
 
@@ -648,40 +685,39 @@
 .contact-social-btn {
   width: 36px;
   height: 36px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 9999px;
+  background: #fbfbf9;
+  border: 1px solid #dce5dc;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #94a3b8;
+  color: #586d65;
   font-size: 16px;
   text-decoration: none;
   transition: all 0.2s;
 }
 
 .contact-social-btn:hover {
-  background: #c5a059;
-  color: #090b10;
-  border-color: #dfba73;
+  background: #128bc0;
+  color: #ffffff;
+  border-color: #128bc0;
   transform: translateY(-2px);
 }
 
 .contact-form-card {
-  background: rgba(18, 22, 32, 0.85);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #d6e0d7;
+  border-radius: 20px;
   padding: 36px 34px;
-  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 16px 40px -10px rgba(21, 35, 42, 0.06);
 }
 
 .contact-form-card h2 {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: "Manrope", sans-serif;
   font-size: 22px;
   font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.01em;
+  color: #15232a;
+  letter-spacing: -0.025em;
 }
 
 .contact-form-row {
@@ -698,7 +734,7 @@
   display: block;
   font-size: 11.5px;
   font-weight: 600;
-  color: #cbd5e1;
+  color: #15232a;
   margin-bottom: 6px;
   letter-spacing: 0.02em;
 }
@@ -707,13 +743,13 @@
 .contact-form-group select,
 .contact-form-group textarea {
   width: 100%;
-  padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 6px;
-  font-family: "Inter", sans-serif;
+  padding: 11px 16px;
+  background: #fbfbf9;
+  border: 1px solid #dce5dc;
+  border-radius: 10px;
+  font-family: "Manrope", sans-serif;
   font-size: 13px;
-  color: #ffffff;
+  color: #15232a;
   outline: none;
   transition: all 0.2s;
   box-sizing: border-box;
@@ -722,24 +758,24 @@
 .contact-form-group input:focus,
 .contact-form-group select:focus,
 .contact-form-group textarea:focus {
-  border-color: #dfba73;
-  background: rgba(197, 160, 89, 0.05);
-  box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.15);
+  border-color: #128bc0;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(18, 139, 192, 0.12);
 }
 
 .contact-form-group select option {
-  background: #0e1219;
-  color: #ffffff;
+  background: #ffffff;
+  color: #15232a;
 }
 
 .contact-submit-btn {
   width: 100%;
   height: 44px;
-  background: #c5a059;
-  border: 1px solid #dfba73;
-  border-radius: 6px;
-  color: #090b10;
-  font-family: "Inter", sans-serif;
+  background: #152c36;
+  border: 1px solid #152c36;
+  border-radius: 9999px;
+  color: #ffffff;
+  font-family: "Manrope", sans-serif;
   font-size: 13.5px;
   font-weight: 600;
   display: flex;
@@ -747,15 +783,16 @@
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(197, 160, 89, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 14px rgba(21, 44, 54, 0.2);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   margin-top: 8px;
 }
 
 .contact-submit-btn:hover {
-  background: #dfba73;
+  background: #128bc0;
+  border-color: #128bc0;
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(197, 160, 89, 0.35);
+  box-shadow: 0 8px 24px rgba(18, 139, 192, 0.3);
 }
 
 @media (max-width: 800px) {

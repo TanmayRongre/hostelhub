@@ -147,30 +147,30 @@ export default function AdminHostelManagement({ onHostelsUpdated }) {
   });
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in font-sans">
       {toast && (
-        <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-sm font-medium border animate-slide-up ${
-          toast.type === 'error' ? 'bg-rose-950/95 text-rose-200 border-rose-700/60' : 'bg-emerald-950/95 text-emerald-200 border-emerald-700/60'
+        <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 text-sm font-medium border animate-slide-up ${
+          toast.type === 'error' ? 'bg-rose-50 text-rose-800 border-rose-200' : 'bg-emerald-50 text-emerald-800 border-emerald-200'
         }`}>
-          {toast.type === 'error' ? <AlertCircle className="w-4 h-4 text-rose-400" /> : <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+          {toast.type === 'error' ? <AlertCircle className="w-4 h-4 text-rose-600" /> : <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
           <span>{toast.msg}</span>
         </div>
       )}
 
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-xl bg-[#0e1219] border border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white border border-[#d6e0d7] shadow-[0_4px_20px_rgba(21,35,42,0.04)]">
         <div>
-          <h2 className="text-lg font-bold font-serif text-white tracking-tight flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-[#dfba73]" />
+          <h2 className="text-lg font-bold font-serif text-[#15232a] tracking-tight flex items-center gap-2">
+            <Building2 className="w-5 h-5 text-[#128bc0]" />
             Hostel, Block & Room Infrastructure
           </h2>
-          <p className="text-xs text-slate-400">Configure residential blocks, assign wardens, manage capacity, and track room statuses.</p>
+          <p className="text-xs text-[#586d65] mt-0.5">Configure residential blocks, assign wardens, manage capacity, and track room statuses.</p>
         </div>
 
         <div className="flex items-center gap-2.5">
           <button
             onClick={() => setHostelModalOpen(true)}
-            className="btn-arch-primary px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+            className="btn-arch-primary px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Create Hostel</span>
@@ -180,9 +180,9 @@ export default function AdminHostelManagement({ onHostelsUpdated }) {
               setRoomForm((prev) => ({ ...prev, hostel: selectedHostel }));
               setRoomModalOpen(true);
             }}
-            className="btn-arch-secondary px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+            className="btn-arch-secondary px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer text-[#15232a]"
           >
-            <DoorOpen className="w-4 h-4 text-[#dfba73]" />
+            <DoorOpen className="w-4 h-4 text-[#128bc0]" />
             <span>Add Room</span>
           </button>
         </div>
@@ -194,36 +194,36 @@ export default function AdminHostelManagement({ onHostelsUpdated }) {
           <button
             key={h._id}
             onClick={() => setSelectedHostel(h._id)}
-            className={`p-4 rounded-xl border text-left min-w-[220px] transition-all cursor-pointer ${
+            className={`p-4 rounded-2xl border text-left min-w-[220px] transition-all cursor-pointer ${
               selectedHostel === h._id
-                ? 'bg-[#c5a059]/15 border-[#c5a059] shadow-md shadow-[#c5a059]/10 text-white'
-                : 'bg-[#0e1219] border-white/[0.08] hover:border-white/20 text-slate-400'
+                ? 'bg-[#e8f1f5] border-[#128bc0] shadow-sm text-[#15232a]'
+                : 'bg-white border-[#d6e0d7] hover:border-[#128bc0]/40 text-[#586d65] shadow-[0_2px_8px_rgba(21,35,42,0.02)]'
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#dfba73] font-mono">{h.code}</span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-bold uppercase">{h.status || 'Active'}</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#128bc0] font-mono">{h.code}</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold uppercase">{h.status || 'Active'}</span>
             </div>
-            <div className="text-sm font-bold text-white mt-1">{h.name}</div>
-            <div className="text-[11px] text-slate-400 mt-1">Capacity: {h.capacity || 80} Beds · {h.gender === 'girls' ? 'Girls' : 'Boys'}</div>
+            <div className="text-sm font-bold text-[#15232a] mt-1">{h.name}</div>
+            <div className="text-[11px] text-[#586d65] mt-1">Capacity: {h.capacity || 80} Beds · {h.gender === 'girls' ? 'Girls' : 'Boys'}</div>
           </button>
         ))}
       </div>
 
       {/* Visual Room Grid for Selected Hostel */}
-      <div className="p-6 rounded-xl bg-[#0e1219] border border-white/[0.08] space-y-4">
-        <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+      <div className="p-6 rounded-2xl bg-white border border-[#d6e0d7] shadow-[0_4px_20px_rgba(21,35,42,0.04)] space-y-4">
+        <div className="flex items-center justify-between border-b border-[#dce5dc] pb-3">
           <div>
-            <h3 className="text-base font-bold font-serif text-white tracking-tight flex items-center gap-2">
-              <BedDouble className="w-4 h-4 text-[#dfba73]" />
+            <h3 className="text-base font-bold font-serif text-[#15232a] tracking-tight flex items-center gap-2">
+              <BedDouble className="w-4 h-4 text-[#128bc0]" />
               Room Grid & Bed Allocations ({filteredRooms.length} Rooms)
             </h3>
-            <p className="text-xs text-slate-400">Live residential units for currently selected hostel complex.</p>
+            <p className="text-xs text-[#586d65]">Live residential units for currently selected hostel complex.</p>
           </div>
-          <div className="flex items-center gap-3 text-xs">
-            <span className="flex items-center gap-1.5 text-emerald-400"><span className="w-2 h-2 rounded-full bg-emerald-400" /> Available</span>
-            <span className="flex items-center gap-1.5 text-amber-400"><span className="w-2 h-2 rounded-full bg-amber-400" /> Partial</span>
-            <span className="flex items-center gap-1.5 text-rose-400"><span className="w-2 h-2 rounded-full bg-rose-400" /> Occupied</span>
+          <div className="flex items-center gap-3 text-xs font-medium">
+            <span className="flex items-center gap-1.5 text-emerald-700"><span className="w-2 h-2 rounded-full bg-emerald-500" /> Available</span>
+            <span className="flex items-center gap-1.5 text-amber-700"><span className="w-2 h-2 rounded-full bg-amber-500" /> Partial</span>
+            <span className="flex items-center gap-1.5 text-rose-700"><span className="w-2 h-2 rounded-full bg-rose-500" /> Occupied</span>
           </div>
         </div>
 
@@ -232,29 +232,29 @@ export default function AdminHostelManagement({ onHostelsUpdated }) {
             filteredRooms.map((r) => (
               <div
                 key={r._id}
-                className="p-3.5 rounded-lg bg-[#121620] border border-white/[0.08] hover:border-[#c5a059]/40 transition-all space-y-2 flex flex-col justify-between"
+                className="p-3.5 rounded-xl bg-[#fbfbf9] border border-[#dce5dc] hover:border-[#128bc0] transition-all space-y-2 flex flex-col justify-between shadow-xs"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-white">#{r.roomNumber}</span>
+                  <span className="text-xs font-mono font-bold text-[#15232a]">#{r.roomNumber}</span>
                   <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase ${
-                    r.type === 'AC' ? 'bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30' : 'bg-white/[0.06] text-slate-400'
+                    r.type === 'AC' ? 'bg-[#e8f1f5] text-[#128bc0] border border-[#bce4f6]' : 'bg-[#f5f6f0] text-[#586d65] border border-[#d6e0d7]'
                   }`}>
                     {r.type}
                   </span>
                 </div>
 
-                <div className="text-[11px] text-slate-400">
+                <div className="text-[11px] text-[#586d65]">
                   Floor {r.floor} · {r.capacity} Beds
                 </div>
 
-                <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between text-[10px]">
-                  <span className="font-mono text-emerald-400 font-bold">₹{r.rentPerMonth?.toLocaleString('en-IN')}/mo</span>
-                  <span className="text-slate-400 font-medium">✓ Provisioned</span>
+                <div className="pt-2 border-t border-[#dce5dc] flex items-center justify-between text-[10px]">
+                  <span className="font-mono text-emerald-700 font-bold">₹{r.rentPerMonth?.toLocaleString('en-IN')}/mo</span>
+                  <span className="text-[#586d65] font-medium">✓ Provisioned</span>
                 </div>
               </div>
             ))
           ) : (
-            <div className="col-span-full p-8 text-center text-xs text-slate-500">
+            <div className="col-span-full p-8 text-center text-xs text-[#586d65]">
               No rooms added to this hostel yet. Click "Add Room" to create units.
             </div>
           )}
@@ -263,60 +263,60 @@ export default function AdminHostelManagement({ onHostelsUpdated }) {
 
       {/* ── MODAL: CREATE HOSTEL ── */}
       {hostelModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in font-sans">
-          <div className="w-full max-w-md bg-[#0e1219] border border-white/10 rounded-2xl p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
-              <h3 className="text-base font-bold font-serif text-white tracking-tight flex items-center gap-2">
-                <Building2 className="w-5 h-5 text-[#dfba73]" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#15232a]/60 backdrop-blur-sm animate-fade-in font-sans">
+          <div className="w-full max-w-md bg-white border border-[#d6e0d7] rounded-2xl p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[#dce5dc] pb-3">
+              <h3 className="text-base font-bold font-serif text-[#15232a] tracking-tight flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-[#128bc0]" />
                 Create Hostel Complex
               </h3>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={handleAutofillHostel}
-                  className="px-2.5 py-1 rounded-lg bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
+                  className="px-2.5 py-1 rounded-lg bg-[#e8f1f5] text-[#128bc0] hover:bg-[#d5e8f2] border border-[#bce4f6] text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95"
                   title="Autofill sample hostel details"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-[#dfba73]" />
+                  <Sparkles className="w-3.5 h-3.5 text-[#128bc0]" />
                   <span>Auto Fill Demo</span>
                 </button>
-                <button onClick={() => setHostelModalOpen(false)} className="w-7 h-7 rounded-lg bg-white/[0.05] border border-white/[0.08] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs">✕</button>
+                <button onClick={() => setHostelModalOpen(false)} className="w-7 h-7 rounded-lg bg-[#f5f6f0] border border-[#d6e0d7] text-[#586d65] hover:text-[#15232a] flex items-center justify-center transition-colors cursor-pointer text-xs">✕</button>
               </div>
             </div>
 
             <form onSubmit={handleCreateHostel} className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1 uppercase tracking-wider text-[11px]">Hostel Name *</label>
+                  <label className="block font-semibold text-[#15232a] mb-1 uppercase tracking-wider text-[11px]">Hostel Name *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Sahyadri Boys Hostel"
                     value={hostelForm.name}
                     onChange={(e) => setHostelForm({ ...hostelForm, name: e.target.value })}
-                    className="w-full p-2.5 bg-[#121620] border border-white/[0.08] rounded-lg text-white focus:outline-none focus:border-[#dfba73]"
+                    className="w-full p-2.5 bg-[#fbfbf9] border border-[#d6e0d7] rounded-xl text-[#15232a] focus:outline-none focus:border-[#128bc0]"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1 uppercase tracking-wider text-[11px]">Block Code *</label>
+                  <label className="block font-semibold text-[#15232a] mb-1 uppercase tracking-wider text-[11px]">Block Code *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. SAY-A"
                     value={hostelForm.code}
                     onChange={(e) => setHostelForm({ ...hostelForm, code: e.target.value })}
-                    className="w-full p-2.5 bg-[#121620] border border-white/[0.08] rounded-lg text-white focus:outline-none focus:border-[#dfba73] uppercase"
+                    className="w-full p-2.5 bg-[#fbfbf9] border border-[#d6e0d7] rounded-xl text-[#15232a] focus:outline-none focus:border-[#128bc0] uppercase"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1 uppercase tracking-wider text-[11px]">Gender *</label>
+                  <label className="block font-semibold text-[#15232a] mb-1 uppercase tracking-wider text-[11px]">Gender *</label>
                   <select
                     value={hostelForm.gender}
                     onChange={(e) => setHostelForm({ ...hostelForm, gender: e.target.value })}
-                    className="w-full p-2.5 bg-[#121620] border border-white/[0.08] rounded-lg text-white focus:outline-none focus:border-[#dfba73]"
+                    className="w-full p-2.5 bg-[#fbfbf9] border border-[#d6e0d7] rounded-xl text-[#15232a] focus:outline-none focus:border-[#128bc0]"
                   >
                     <option value="boys">Boys Hostel</option>
                     <option value="girls">Girls Hostel</option>
@@ -324,28 +324,28 @@ export default function AdminHostelManagement({ onHostelsUpdated }) {
                   </select>
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1 uppercase tracking-wider text-[11px]">Total Capacity (Beds) *</label>
+                  <label className="block font-semibold text-[#15232a] mb-1 uppercase tracking-wider text-[11px]">Total Capacity (Beds) *</label>
                   <input
                     type="number"
                     required
                     value={hostelForm.capacity}
                     onChange={(e) => setHostelForm({ ...hostelForm, capacity: Number(e.target.value) })}
-                    className="w-full p-2.5 bg-[#121620] border border-white/[0.08] rounded-lg text-white focus:outline-none focus:border-[#dfba73]"
+                    className="w-full p-2.5 bg-[#fbfbf9] border border-[#d6e0d7] rounded-xl text-[#15232a] focus:outline-none focus:border-[#128bc0]"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2.5 pt-2 border-t border-white/[0.08]">
+              <div className="flex justify-end gap-2.5 pt-2 border-t border-[#dce5dc]">
                 <button
                   type="button"
                   onClick={() => setHostelModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-white/[0.1] text-slate-400 hover:text-white font-medium cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-[#d6e0d7] text-[#586d65] hover:text-[#15232a] hover:bg-[#f5f6f0] font-medium cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="btn-arch-primary px-5 py-2.5 rounded-lg text-xs font-bold cursor-pointer"
+                  className="btn-arch-primary px-5 py-2.5 rounded-xl text-xs font-bold cursor-pointer"
                 >
                   Create Complex
                 </button>
@@ -357,59 +357,59 @@ export default function AdminHostelManagement({ onHostelsUpdated }) {
 
       {/* ── MODAL: CREATE ROOM ── */}
       {roomModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in font-sans">
-          <div className="w-full max-w-md bg-[#0e1219] border border-white/10 rounded-2xl p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
-              <h3 className="text-base font-bold font-serif text-white tracking-tight flex items-center gap-2">
-                <DoorOpen className="w-5 h-5 text-[#dfba73]" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#15232a]/60 backdrop-blur-sm animate-fade-in font-sans">
+          <div className="w-full max-w-md bg-white border border-[#d6e0d7] rounded-2xl p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[#dce5dc] pb-3">
+              <h3 className="text-base font-bold font-serif text-[#15232a] tracking-tight flex items-center gap-2">
+                <DoorOpen className="w-5 h-5 text-[#128bc0]" />
                 Add Residential Room
               </h3>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={handleAutofillRoom}
-                  className="px-2.5 py-1 rounded-lg bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm active:scale-95"
+                  className="px-2.5 py-1 rounded-lg bg-[#e8f1f5] text-[#128bc0] hover:bg-[#d5e8f2] border border-[#bce4f6] text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95"
                   title="Autofill sample room details"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-[#dfba73]" />
+                  <Sparkles className="w-3.5 h-3.5 text-[#128bc0]" />
                   <span>Auto Fill Demo</span>
                 </button>
-                <button onClick={() => setRoomModalOpen(false)} className="w-7 h-7 rounded-lg bg-white/[0.05] border border-white/[0.08] text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer text-xs">✕</button>
+                <button onClick={() => setRoomModalOpen(false)} className="w-7 h-7 rounded-lg bg-[#f5f6f0] border border-[#d6e0d7] text-[#586d65] hover:text-[#15232a] flex items-center justify-center transition-colors cursor-pointer text-xs">✕</button>
               </div>
             </div>
 
             <form onSubmit={handleCreateRoom} className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1 uppercase tracking-wider text-[11px]">Room Number *</label>
+                  <label className="block font-semibold text-[#15232a] mb-1 uppercase tracking-wider text-[11px]">Room Number *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. 201"
                     value={roomForm.roomNumber}
                     onChange={(e) => setRoomForm({ ...roomForm, roomNumber: e.target.value })}
-                    className="w-full p-2.5 bg-[#121620] border border-white/[0.08] rounded-lg text-white focus:outline-none focus:border-[#dfba73]"
+                    className="w-full p-2.5 bg-[#fbfbf9] border border-[#d6e0d7] rounded-xl text-[#15232a] focus:outline-none focus:border-[#128bc0]"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1 uppercase tracking-wider text-[11px]">Floor *</label>
+                  <label className="block font-semibold text-[#15232a] mb-1 uppercase tracking-wider text-[11px]">Floor *</label>
                   <input
                     type="number"
                     required
                     value={roomForm.floor}
                     onChange={(e) => setRoomForm({ ...roomForm, floor: Number(e.target.value) })}
-                    className="w-full p-2.5 bg-[#121620] border border-white/[0.08] rounded-lg text-white focus:outline-none focus:border-[#dfba73]"
+                    className="w-full p-2.5 bg-[#fbfbf9] border border-[#d6e0d7] rounded-xl text-[#15232a] focus:outline-none focus:border-[#128bc0]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1 uppercase tracking-wider text-[11px]">Room Type</label>
+                  <label className="block font-semibold text-[#15232a] mb-1 uppercase tracking-wider text-[11px]">Room Type</label>
                   <select
                     value={roomForm.type}
                     onChange={(e) => setRoomForm({ ...roomForm, type: e.target.value })}
-                    className="w-full p-2.5 bg-[#121620] border border-white/[0.08] rounded-lg text-white focus:outline-none focus:border-[#dfba73]"
+                    className="w-full p-2.5 bg-[#fbfbf9] border border-[#d6e0d7] rounded-xl text-[#15232a] focus:outline-none focus:border-[#128bc0]"
                   >
                     <option value="AC">AC Room</option>
                     <option value="Non-AC">Non-AC Standard</option>
@@ -417,27 +417,27 @@ export default function AdminHostelManagement({ onHostelsUpdated }) {
                   </select>
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1 uppercase tracking-wider text-[11px]">Monthly Rent (₹)</label>
+                  <label className="block font-semibold text-[#15232a] mb-1 uppercase tracking-wider text-[11px]">Monthly Rent (₹)</label>
                   <input
                     type="number"
                     value={roomForm.rentPerMonth}
                     onChange={(e) => setRoomForm({ ...roomForm, rentPerMonth: Number(e.target.value) })}
-                    className="w-full p-2.5 bg-[#121620] border border-white/[0.08] rounded-lg text-white focus:outline-none focus:border-[#dfba73]"
+                    className="w-full p-2.5 bg-[#fbfbf9] border border-[#d6e0d7] rounded-xl text-[#15232a] focus:outline-none focus:border-[#128bc0]"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2.5 pt-2 border-t border-white/[0.08]">
+              <div className="flex justify-end gap-2.5 pt-2 border-t border-[#dce5dc]">
                 <button
                   type="button"
                   onClick={() => setRoomModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-white/[0.1] text-slate-400 hover:text-white font-medium cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-[#d6e0d7] text-[#586d65] hover:text-[#15232a] hover:bg-[#f5f6f0] font-medium cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="btn-arch-primary px-5 py-2.5 rounded-lg text-xs font-bold cursor-pointer"
+                  className="btn-arch-primary px-5 py-2.5 rounded-xl text-xs font-bold cursor-pointer"
                 >
                   Provision Room
                 </button>

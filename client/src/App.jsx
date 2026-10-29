@@ -17,9 +17,9 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <SmoothScroll />
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#090b10', color: '#f1f3f7' }}>
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#f5f6f0', color: '#15232a' }}>
           <Navbar />
-          <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <main style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingTop: '64px' }}>
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Home />} />

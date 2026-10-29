@@ -429,28 +429,28 @@ export default function AuthForm({ initialActive = false }) {
 
       {/* ── FORGOT PASSWORD MODAL ── */}
       {forgotModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in font-sans">
-          <div className="w-full max-w-md p-6 rounded-xl bg-[#0e1219] border border-white/[0.1] shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#15232a]/60 backdrop-blur-sm animate-fade-in font-sans">
+          <div className="w-full max-w-md p-6 rounded-2xl bg-white border border-[#d6e0d7] shadow-2xl space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-serif text-base font-bold text-white">Reset Account Password</h3>
+              <h3 className="font-serif text-base font-bold text-[#15232a]">Reset Account Password</h3>
               <button
                 onClick={() => setForgotModal(false)}
-                className="text-slate-400 hover:text-white cursor-pointer"
+                className="w-7 h-7 rounded-lg bg-[#f5f6f0] border border-[#d6e0d7] text-[#586d65] hover:text-[#15232a] flex items-center justify-center transition-colors cursor-pointer text-xs"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {forgotSent ? (
-              <div className="p-4 rounded-lg bg-emerald-950/60 border border-emerald-500/30 text-emerald-200 text-xs space-y-2">
+              <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs space-y-2">
                 <div className="font-bold flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                   <span>Password Reset Link Dispatched</span>
                 </div>
                 <p>If an account with <strong>{forgotEmail || 'your email'}</strong> exists in our records, a secure password reset link has been dispatched to your inbox.</p>
                 <button
                   onClick={() => setForgotModal(false)}
-                  className="w-full py-2 mt-2 rounded-md bg-[#c5a059] text-[#090b10] font-semibold text-xs cursor-pointer"
+                  className="w-full py-2.5 mt-2 rounded-xl btn-arch-primary font-bold text-xs cursor-pointer"
                 >
                   Return to Login
                 </button>
@@ -458,13 +458,13 @@ export default function AuthForm({ initialActive = false }) {
             ) : (
               <form onSubmit={handleSendReset} className="space-y-3">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-[#586d65]">
                     Enter your registered institutional college email.
                   </p>
                   <button
                     type="button"
                     onClick={() => setForgotEmail('student@mountreach.edu')}
-                    className="px-2 py-0.5 rounded bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-[10px] font-semibold flex items-center gap-1 shrink-0 cursor-pointer"
+                    className="px-2.5 py-1 rounded-lg bg-[#e8f1f5] text-[#128bc0] hover:bg-[#d5e8f2] border border-[#bce4f6] text-[10px] font-semibold flex items-center gap-1 shrink-0 cursor-pointer shadow-xs"
                   >
                     <Sparkles className="w-2.5 h-2.5" />
                     <span>Auto Fill</span>
@@ -475,12 +475,12 @@ export default function AuthForm({ initialActive = false }) {
                   placeholder="name@mountreach.edu"
                   value={forgotEmail}
                   onChange={(e) => setForgotEmail(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-md bg-[#141824] border border-white/[0.1] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#dfba73]"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#fbfbf9] border border-[#d6e0d7] text-xs text-[#15232a] placeholder-[#586d65]/60 focus:outline-none focus:border-[#128bc0]"
                   required
                 />
                 <button
                   type="submit"
-                  className="w-full py-2.5 rounded-md bg-[#c5a059] hover:bg-[#dfba73] text-[#090b10] font-semibold text-xs shadow-sm transition-all cursor-pointer"
+                  className="w-full py-2.5 rounded-xl btn-arch-primary font-bold text-xs shadow-xs transition-all cursor-pointer"
                 >
                   Send Recovery Link
                 </button>

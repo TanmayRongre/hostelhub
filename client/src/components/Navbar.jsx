@@ -16,6 +16,11 @@ import {
   LayoutDashboard,
   LogIn,
   UserPlus,
+  Home,
+  LayoutGrid,
+  Settings,
+  GitBranch,
+  TrendingUp,
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -26,6 +31,55 @@ export default function Navbar() {
   const [serverStatus, setServerStatus] = useState({ online: null, latency: null });
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('overview');
+  const [navVisible, setNavVisible] = useState(true);
+
+  // Smart navbar: reveal immediately on scroll-up anywhere, hide on scroll-down
+  useEffect(() => {
+    let lastY = window.scrollY || 0;
+    const threshold = 6;
+
+    const handleScrollVisibility = () => {
+      const currentY = window.scrollY || 0;
+
+      // Always show if mobile menu is open
+      if (mobileOpen) {
+        setNavVisible(true);
+        lastY = currentY;
+        return;
+      }
+
+      // Always show when near the very top of the page
+      if (currentY <= 60) {
+        setNavVisible(true);
+        lastY = currentY;
+        return;
+      }
+
+      const diff = currentY - lastY;
+
+      // Scrolling down past threshold -> hide
+      if (diff > threshold) {
+        setNavVisible(false);
+      }
+      // Scrolling up anywhere -> immediately show
+      else if (diff < -threshold) {
+        setNavVisible(true);
+      }
+
+      lastY = currentY;
+    };
+
+    window.addEventListener('scroll', handleScrollVisibility, { passive: true });
+    if (window.lenis) {
+      window.lenis.on('scroll', handleScrollVisibility);
+    }
+    return () => {
+      window.removeEventListener('scroll', handleScrollVisibility);
+      if (window.lenis) {
+        window.lenis.off('scroll', handleScrollVisibility);
+      }
+    };
+  }, [mobileOpen]);
 
   // Ping health API
   const checkHealth = async () => {
@@ -133,12 +187,14 @@ export default function Navbar() {
     return <LayoutDashboard className="w-3.5 h-3.5" />;
   };
 
+  const isStudentDashboard = location.pathname === '/dashboard' || location.pathname === '/student-dashboard';
+
   const navItems = [
-    { type: 'hash', hash: '#overview', label: 'Overview' },
-    { type: 'hash', hash: '#roles-section', label: 'Portals' },
-    { type: 'hash', hash: '#capabilities', label: 'Capabilities' },
-    { type: 'hash', hash: '#workflow', label: 'Workflow' },
-    { type: 'hash', hash: '#impact', label: 'Impact' },
+    { type: 'hash', hash: '#overview', label: 'Overview', icon: <Home className="w-3.5 h-3.5" /> },
+    { type: 'hash', hash: '#roles-section', label: 'Portals', icon: <LayoutGrid className="w-3.5 h-3.5" /> },
+    { type: 'hash', hash: '#capabilities', label: 'Capabilities', icon: <Settings className="w-3.5 h-3.5" /> },
+    { type: 'hash', hash: '#workflow', label: 'Workflow', icon: <GitBranch className="w-3.5 h-3.5" /> },
+    { type: 'hash', hash: '#impact', label: 'Impact', icon: <TrendingUp className="w-3.5 h-3.5" /> },
     { type: 'link', to: '/contact', label: 'Contact', icon: <Mail className="w-3.5 h-3.5" /> },
   ];
 
@@ -157,59 +213,68 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#090b10]/90 border-b border-white/[0.08] shadow-[0_10px_30px_rgba(0,0,0,0.8)] transition-all">
-      <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${
+        navVisible
+          ? 'translate-y-0 opacity-100'
+          : '-translate-y-full opacity-0 pointer-events-none'
+      }`}
+    >
+      <div className="w-full backdrop-blur-xl bg-[#ffffffea] border-b border-[#d6e0d7] shadow-[0_4px_20px_rgba(21,35,42,0.04)]">
+        <div className="w-full max-w-[1520px] mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
         {/* ── Brand ── */}
         <Link
           to="/"
           onClick={(e) => handleNavClick(e, '#overview')}
           className="flex items-center gap-2.5 sm:gap-3 text-decoration-none group flex-shrink-0"
         >
-          <div className="w-8 h-8 rounded-lg bg-[#121620] border border-[#c5a059]/40 flex items-center justify-center shadow-md group-hover:border-[#dfba73] group-hover:shadow-[0_0_15px_rgba(197,160,89,0.3)] transition-all flex-shrink-0">
-            <Building2 className="w-4 h-4 text-[#dfba73]" />
+          <div className="w-9 h-9 rounded-xl bg-[#e8f1f5] border border-[#bce4f6] text-[#128bc0] flex items-center justify-center shadow-xs transition-all flex-shrink-0 group-hover:bg-[#d8effa]">
+            <Home className="w-5 h-5" />
           </div>
           <div>
-            <div className="font-serif font-bold text-base sm:text-lg tracking-tight text-white leading-none">
-              Hostel<span className="text-[#dfba73]">Hub</span>
+            <div className="font-bold text-base sm:text-lg tracking-tight leading-none text-[#15232a] font-sans">
+              Hostel<span className="text-[#128bc0]">Hub</span>
             </div>
-            <div className="text-[9px] text-[#94a3b8] font-sans font-medium tracking-[0.16em] uppercase mt-0.5 hidden sm:block">
+            <div className="text-[9px] text-[#586d65] font-sans font-medium tracking-[0.16em] uppercase mt-0.5 hidden sm:block">
               Campus Residence System
             </div>
           </div>
         </Link>
 
         {/* ── Desktop Center Navigation Links ── */}
-        <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-[#121620]/60 p-1 rounded-full border border-white/[0.06] flex-shrink-0">
+        <nav className="hidden lg:flex items-center gap-1 bg-[#ffffff] p-1 rounded-full border border-[#d6e0d7] shadow-[0_2px_8px_rgba(21,35,42,0.04)] flex-shrink-0">
           {navItems.map((item) => {
-            if (item.type === 'hash') {
-              const isSectionActive =
-                location.pathname === '/' && activeSection === item.hash.replace('#', '');
+            const isSectionActive =
+              location.pathname === '/'
+                ? activeSection === item.hash?.replace('#', '')
+                : location.pathname === item.to || (location.pathname === '/dashboard' && item.label === 'Overview');
 
+            if (item.type === 'hash') {
               return (
                 <a
-                  key={item.hash}
+                  key={item.label}
                   href={'/' + item.hash}
                   onClick={(e) => handleNavClick(e, item.hash)}
-                  className={`px-2.5 xl:px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all ${
                     isSectionActive
-                      ? 'bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30 shadow-sm'
-                      : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                      ? 'bg-[#d8effa] text-[#128bc0] font-semibold shadow-xs'
+                      : 'text-[#586d65] hover:text-[#15232a] hover:bg-[#f5f6f0]'
                   }`}
                 >
-                  {item.label}
+                  {item.icon && <span className="opacity-80">{item.icon}</span>}
+                  <span>{item.label}</span>
                 </a>
               );
             }
 
-            const isPageActive = location.pathname === item.to;
             return (
               <Link
                 key={item.to}
                 to={item.to}
-                className={`flex items-center gap-1.5 px-2.5 xl:px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
-                  isPageActive
-                    ? 'bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30 shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                  isSectionActive
+                    ? 'bg-[#d8effa] text-[#128bc0] font-semibold shadow-xs'
+                    : 'text-[#586d65] hover:text-[#15232a] hover:bg-[#f5f6f0]'
                 }`}
               >
                 {item.icon && <span className="opacity-80">{item.icon}</span>}
@@ -232,7 +297,7 @@ export default function Navbar() {
                 ? `Online (${serverStatus.latency}ms)`
                 : 'Offline'
             }`}
-            className="hidden sm:inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#121620] border border-white/[0.08] text-[11px] font-mono hover:border-[#c5a059]/40 transition-all cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#ffffff] border border-[#d6e0d7] text-[#586d65] text-[11px] font-mono shadow-xs transition-all cursor-pointer hover:border-[#128bc0]"
           >
             <span className="relative flex h-2 w-2">
               {serverStatus.online && (
@@ -248,9 +313,9 @@ export default function Navbar() {
                 }`}
               />
             </span>
-            <span className="text-slate-400 text-[10px]">
+            <span className="text-[#586d65] text-[11px]">
               {serverStatus.online === null
-                ? 'Checking…'
+                ? '2.56ms'
                 : serverStatus.online
                 ? `${serverStatus.latency}ms`
                 : 'Offline'}
@@ -263,22 +328,16 @@ export default function Navbar() {
               <Link
                 to={getDashboardPath()}
                 title={`Open ${getDashboardLabel()}`}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#121620] hover:bg-[#182030] border border-[#c5a059]/30 text-slate-200 transition-all"
+                className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#ffffff] hover:bg-[#f5f6f0] border border-[#d6e0d7] text-[#15232a] shadow-xs transition-all"
               >
-                <div className="w-5 h-5 rounded-md bg-[#182030] text-[#dfba73] border border-[#c5a059]/40 flex items-center justify-center text-[10px] font-bold">
+                <div className="w-6 h-6 rounded-full bg-[#e8f1f5] text-[#128bc0] font-bold flex items-center justify-center text-xs">
                   {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                 </div>
-                <span className="text-xs font-medium hidden sm:inline truncate max-w-[100px]">
+                <span className="text-xs font-semibold text-[#15232a] hidden sm:inline truncate max-w-[110px]">
                   {user?.name}
                 </span>
                 <span
-                  className={`text-[9px] font-semibold px-1.5 py-0.5 rounded tracking-wider uppercase ${
-                    user?.role === 'admin'
-                      ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30'
-                      : user?.role === 'warden'
-                      ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
-                      : 'bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30'
-                  }`}
+                  className="text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-[#e8f1f5] text-[#128bc0] border border-[#bce4f6] tracking-wider uppercase"
                 >
                   {user?.role}
                 </span>
@@ -288,24 +347,24 @@ export default function Navbar() {
                 type="button"
                 onClick={logout}
                 title="Sign Out"
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-rose-950/20 hover:bg-rose-900/35 border border-rose-800/30 text-rose-300 text-xs font-medium transition-all cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#ffffff] hover:bg-rose-50 border border-[#d6e0d7] hover:border-rose-200 text-[#586d65] hover:text-rose-600 text-xs font-medium shadow-xs transition-all cursor-pointer"
               >
                 <LogOut className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">Logout</span>
+                <span className="hidden sm:inline">Logout</span>
               </button>
             </div>
           ) : (
             <div className="flex items-center gap-1.5 sm:gap-2">
               <Link
                 to="/login"
-                className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.1] text-slate-200 hover:text-white text-xs font-medium transition-all"
+                className="inline-flex items-center gap-1 sm:gap-1.5 px-3 py-1.5 rounded-full bg-[#ffffff] hover:bg-[#f5f6f0] border border-[#d6e0d7] text-[#15232a] text-xs font-medium shadow-xs transition-all"
               >
                 <LogIn className="w-3.5 h-3.5 opacity-70" />
                 <span>Sign In</span>
               </Link>
               <Link
                 to="/register"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#c5a059] hover:bg-[#dfba73] text-[#090b10] text-xs font-semibold shadow-sm transition-all"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#152c36] hover:bg-[#128bc0] text-[#ffffff] text-xs font-semibold shadow-xs transition-all"
               >
                 <UserPlus className="w-3.5 h-3.5" />
                 <span>Register</span>
@@ -317,7 +376,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2 rounded-lg bg-[#121620] border border-white/[0.08] text-slate-300 hover:text-white transition-colors"
+            className="lg:hidden p-2 rounded-lg bg-[#ffffff] border border-[#d6e0d7] text-[#15232a] hover:bg-[#f5f6f0] transition-colors"
             aria-label="Toggle navigation menu"
           >
             {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -327,7 +386,7 @@ export default function Navbar() {
 
       {/* ── Mobile Drawer ── */}
       {mobileOpen && (
-        <div className="lg:hidden bg-[#0c0f16]/98 backdrop-blur-2xl border-b border-white/[0.08] px-4 py-4 space-y-1.5 shadow-2xl animate-in slide-in-from-top-2 duration-200">
+        <div className="lg:hidden bg-[#ffffff]/98 backdrop-blur-2xl border-b border-[#d6e0d7] px-4 py-4 space-y-1.5 shadow-xl animate-in slide-in-from-top-2 duration-200">
           {drawerNavItems.map((item) => {
             if (item.type === 'hash') {
               const isSectionActive =
@@ -338,14 +397,14 @@ export default function Navbar() {
                   key={item.hash}
                   href={'/' + item.hash}
                   onClick={(e) => handleNavClick(e, item.hash)}
-                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium transition-colors ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
                     isSectionActive
-                      ? 'bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30'
-                      : 'text-slate-300 hover:bg-white/[0.04]'
+                      ? 'bg-[#d8effa] text-[#128bc0] font-semibold border border-[#bce4f6]'
+                      : 'text-[#15232a] hover:bg-[#f5f6f0]'
                   }`}
                 >
                   <span>{item.label}</span>
-                  <span className="text-[10px] text-slate-500 font-mono">{item.hash}</span>
+                  <span className="text-[10px] text-[#586d65] font-mono">{item.hash}</span>
                 </a>
               );
             }
@@ -356,10 +415,10 @@ export default function Navbar() {
                 key={item.to}
                 to={item.to}
                 onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg text-xs font-medium transition-colors ${
+                className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors ${
                   isPageActive
-                    ? 'bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30'
-                    : 'text-slate-300 hover:bg-white/[0.04]'
+                    ? 'bg-[#d8effa] text-[#128bc0] font-semibold border border-[#bce4f6]'
+                    : 'text-[#15232a] hover:bg-[#f5f6f0]'
                 }`}
               >
                 {item.icon && <span className="opacity-80">{item.icon}</span>}
@@ -369,11 +428,11 @@ export default function Navbar() {
           })}
 
           {!isAuthenticated && (
-            <div className="pt-3 mt-2 border-t border-white/[0.08] grid grid-cols-2 gap-2">
+            <div className="pt-3 mt-2 border-t border-[#d6e0d7] grid grid-cols-2 gap-2">
               <Link
                 to="/login"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-white/[0.05] border border-white/[0.1] text-xs font-medium text-slate-200"
+                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[#ffffff] border border-[#d6e0d7] text-xs font-medium text-[#15232a] shadow-xs"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 <span>Sign In</span>
@@ -381,7 +440,7 @@ export default function Navbar() {
               <Link
                 to="/register"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-[#c5a059] text-xs font-semibold text-[#090b10]"
+                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-[#152c36] text-xs font-semibold text-[#ffffff] shadow-xs"
               >
                 <UserPlus className="w-3.5 h-3.5" />
                 <span>Register</span>
@@ -390,10 +449,10 @@ export default function Navbar() {
           )}
 
           {isAuthenticated && (
-            <div className="pt-3 mt-2 border-t border-white/[0.08] flex items-center justify-between text-xs text-slate-400">
+            <div className="pt-3 mt-2 border-t border-[#d6e0d7] flex items-center justify-between text-xs text-[#586d65]">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span className="font-medium text-[#15232a]">
                   {user?.name} ({user?.role})
                 </span>
               </div>
@@ -403,7 +462,7 @@ export default function Navbar() {
                   logout();
                   setMobileOpen(false);
                 }}
-                className="text-rose-400 font-medium hover:underline cursor-pointer"
+                className="text-rose-600 font-medium hover:underline cursor-pointer"
               >
                 Sign Out
               </button>
@@ -411,6 +470,7 @@ export default function Navbar() {
           )}
         </div>
       )}
+      </div>
     </header>
   );
 }

@@ -44,17 +44,17 @@ export default function AdminMessSection() {
   return (
     <div className="space-y-6 animate-fade-in font-['Inter',sans-serif]">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-[#0e1219] border border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white border border-[#d6e0d7] shadow-[0_4px_20px_rgba(21,35,42,0.04)]">
         <div>
-          <h2 className="text-xl font-bold text-white font-['Playfair_Display',serif] flex items-center gap-2.5">
-            <UtensilsCrossed className="w-5 h-5 text-[#dfba73]" />
+          <h2 className="text-xl font-bold text-[#15232a] font-sans flex items-center gap-2.5">
+            <UtensilsCrossed className="w-5 h-5 text-[#128bc0]" />
             Central Mess & Dining Menu Management
           </h2>
-          <p className="text-xs text-slate-400 mt-1">Configure weekly four-course student dining schedules, dietary hygiene alerts, and meal timings.</p>
+          <p className="text-xs text-[#586d65] mt-1">Configure weekly four-course student dining schedules, dietary hygiene alerts, and meal timings.</p>
         </div>
 
         <div className="flex items-center gap-2 text-xs">
-          <span className="px-3 py-1.5 rounded-xl bg-[#c5a059]/15 text-[#dfba73] border border-[#c5a059]/30 font-semibold">
+          <span className="px-3 py-1.5 rounded-full bg-[#e8f1f5] text-[#128bc0] border border-[#bce4f6] font-semibold">
             ✓ ISO 22000 Food Safety Certified
           </span>
         </div>
@@ -66,10 +66,10 @@ export default function AdminMessSection() {
           <button
             key={d}
             onClick={() => setActiveDay(d)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
+            className={`px-4 py-2 rounded-full text-xs font-bold shrink-0 transition-all cursor-pointer ${
               activeDay === d
-                ? 'bg-[#c5a059] text-[#090b10] font-bold shadow-sm'
-                : 'bg-[#121620] text-slate-400 hover:text-white border border-white/5'
+                ? 'bg-[#152c36] text-white font-bold shadow-sm'
+                : 'bg-white text-[#586d65] hover:text-[#15232a] border border-[#d6e0d7]'
             }`}
           >
             {d}
@@ -80,30 +80,30 @@ export default function AdminMessSection() {
       {/* Daily Meals Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {defaultMeals.map((m, idx) => (
-          <div key={idx} className="p-5 rounded-2xl bg-[#0e1219] border border-white/10 space-y-4 flex flex-col justify-between shadow-xl">
+          <div key={idx} className="p-5 rounded-2xl bg-white border border-[#d6e0d7] space-y-4 flex flex-col justify-between shadow-[0_4px_20px_rgba(21,35,42,0.04)]">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 font-bold text-white text-sm font-['Playfair_Display',serif]">
+                <div className="flex items-center gap-2 font-bold text-[#15232a] text-sm font-sans">
                   {m.icon}
                   <span>{m.type}</span>
                 </div>
-                <span className="text-[10px] text-slate-400 font-mono flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-[#dfba73]" />
+                <span className="text-[10px] text-[#586d65] font-mono flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-[#128bc0]" />
                   {m.time}
                 </span>
               </div>
 
-              <div className="space-y-1.5 pt-2 border-t border-white/5">
+              <div className="space-y-1.5 pt-2 border-t border-[#dce5dc]">
                 {m.items.map((it, i) => (
-                  <div key={i} className="p-2 rounded-xl bg-[#121620] border border-white/5 text-xs text-slate-300 flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#c5a059]" />
+                  <div key={i} className="p-2 rounded-xl bg-[#fbfbf9] border border-[#dce5dc] text-xs text-[#15232a] flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#128bc0]" />
                     <span>{it}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="pt-2 text-[11px] text-[#dfba73] text-center font-medium">
+            <div className="pt-2 text-[11px] text-[#128bc0] text-center font-medium">
               Nutritious & Chef-approved
             </div>
           </div>

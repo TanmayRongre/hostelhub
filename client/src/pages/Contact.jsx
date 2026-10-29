@@ -160,10 +160,10 @@ export default function Contact() {
                 <div style={{ width: 48, height: 48, borderRadius: 8, background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)', color: '#34d399', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
-                <h2 style={{ color: '#fff', margin: '0 0 8px', fontSize: 22, fontFamily: 'Playfair Display, serif' }}>
+                <h2 style={{ color: '#15232a', margin: '0 0 8px', fontSize: 22, fontFamily: 'Manrope, sans-serif', fontWeight: 700, letterSpacing: '-0.025em' }}>
                   Inquiry Ticket Registered
                 </h2>
-                <p style={{ color: '#94a3b8', fontSize: 13, lineHeight: 1.6, maxWidth: 440, margin: '0 auto 20px' }}>
+                <p style={{ color: '#586d65', fontSize: 13, lineHeight: 1.6, maxWidth: 440, margin: '0 auto 20px' }}>
                   Thank you, <strong>{submittedTicket.firstName}</strong>. Your ticket has been logged in the residential registry.
                 </p>
 

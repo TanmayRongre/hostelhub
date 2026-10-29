@@ -99,20 +99,20 @@ export default function AdminReportsSection() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-[#0e1219] border border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-white border border-[#d6e0d7] shadow-[0_4px_20px_rgba(21,35,42,0.04)]">
         <div>
-          <h2 className="text-xl font-bold text-white font-['Playfair_Display',serif] flex items-center gap-2.5">
-            <FileSpreadsheet className="w-5 h-5 text-[#dfba73]" />
+          <h2 className="text-xl font-bold text-[#15232a] font-sans flex items-center gap-2.5">
+            <FileSpreadsheet className="w-5 h-5 text-[#128bc0]" />
             Executive Reports & Data Export Center
           </h2>
-          <p className="text-xs text-slate-400 mt-1">Generate compliance-ready CSV datasets and administrative audit reports.</p>
+          <p className="text-xs text-[#586d65] mt-1">Generate compliance-ready CSV datasets and administrative audit reports.</p>
         </div>
 
         <button
           onClick={() => window.print()}
           className="btn-arch-secondary text-xs px-4 py-2 flex items-center gap-2 cursor-pointer"
         >
-          <Printer className="w-4 h-4" />
+          <Printer className="w-4 h-4 text-[#128bc0]" />
           <span>Print Summary</span>
         </button>
       </div>
@@ -122,22 +122,22 @@ export default function AdminReportsSection() {
         {reportModules.map((rep) => (
           <div
             key={rep.id}
-            className="p-6 rounded-2xl bg-[#0e1219] border border-white/10 space-y-4 flex flex-col justify-between shadow-xl"
+            className="p-6 rounded-2xl bg-white border border-[#d6e0d7] space-y-4 flex flex-col justify-between shadow-[0_4px_20px_rgba(21,35,42,0.04)]"
           >
             <div className="space-y-2">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-[#121620] border border-white/5">
+                <div className="p-2.5 rounded-xl bg-[#e8f1f5] border border-[#bce4f6] text-[#128bc0]">
                   {rep.icon}
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white font-['Playfair_Display',serif]">{rep.name}</h3>
-                  <span className="text-[10px] text-[#dfba73] font-mono">Format: .CSV / Excel</span>
+                  <h3 className="text-base font-bold text-[#15232a] font-sans">{rep.name}</h3>
+                  <span className="text-[10px] text-[#128bc0] font-mono">Format: .CSV / Excel</span>
                 </div>
               </div>
-              <p className="text-xs text-slate-300/80 leading-relaxed">{rep.desc}</p>
+              <p className="text-xs text-[#586d65] leading-relaxed">{rep.desc}</p>
             </div>
 
-            <div className="pt-3 border-t border-white/5 flex justify-end">
+            <div className="pt-3 border-t border-[#dce5dc] flex justify-end">
               <button
                 onClick={() => handleExportCSV(rep.id, rep.filename)}
                 disabled={exporting}

@@ -339,23 +339,23 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in font-sans">
-      <div className="relative w-full max-w-md bg-[#0e1219] border border-white/10 rounded-xl shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in font-sans">
+      <div className="relative w-full max-w-md bg-white border border-[#d6e0d7] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="px-6 py-4 bg-[#121620] border-b border-white/[0.08] flex items-center justify-between">
+        <div className="px-6 py-4 bg-[#fbfbf9] border-b border-[#dce5dc] flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-[#c5a059]/10 border border-[#c5a059]/25 text-[#dfba73]">
+            <div className="p-2 rounded-xl bg-[#e8f1f5] border border-[#bce4f6] text-[#128bc0]">
               <Camera className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-serif text-base font-bold text-white">Live Attendance Scanner</h3>
-              <p className="text-[11px] text-slate-400">Scan Warden's daily QR code to mark presence</p>
+              <h3 className="font-serif text-base font-bold text-[#15232a]">Live Attendance Scanner</h3>
+              <p className="text-[11px] text-[#586d65]">Scan Warden's daily QR code to mark presence</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-lg bg-[#0e1219] text-slate-400 hover:text-white border border-white/10 flex items-center justify-center transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-lg bg-white text-slate-400 hover:text-[#15232a] border border-[#d6e0d7] flex items-center justify-center transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -374,22 +374,22 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
         {/* Scanner Viewfinder Box */}
         <div className="p-6 space-y-4 text-center">
           {error && (
-            <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-lg text-xs text-rose-300 flex items-center gap-2 text-left animate-slide-up">
-              <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+            <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-700 flex items-center gap-2 text-left animate-slide-up">
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
               <span>{error}</span>
             </div>
           )}
 
           {scanResult ? (
-            <div className="p-6 rounded-xl bg-emerald-950/40 border border-emerald-500/40 space-y-3 animate-fade-in">
-              <div className="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">
+            <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-3 animate-fade-in">
+              <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-sm">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
-              <h4 className="text-base font-bold text-white">
+              <h4 className="text-base font-bold text-[#15232a]">
                 {scanResult.alreadyMarked ? 'Already Verified Today!' : 'Attendance Verified Present!'}
               </h4>
-              <p className="text-xs text-emerald-300/90">{scanResult.message}</p>
-              <div className="text-[11px] text-slate-400 pt-2 border-t border-emerald-900/50 flex items-center justify-center gap-4">
+              <p className="text-xs text-emerald-800">{scanResult.message}</p>
+              <div className="text-[11px] text-[#586d65] pt-2 border-t border-emerald-200 flex items-center justify-center gap-4">
                 <span>Time: {new Date().toLocaleTimeString()}</span>
                 <span>•</span>
                 <span>Date: {new Date().toLocaleDateString()}</span>
@@ -398,7 +398,7 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
                 <button
                   type="button"
                   onClick={() => handleInstantDemoScan(true)}
-                  className="mt-2 w-full py-2 px-3 rounded-lg bg-[#c5a059]/15 hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-xs font-semibold text-[#dfba73] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  className="mt-2 w-full py-2 px-3 rounded-lg bg-[#e8f1f5] hover:bg-[#d8effa] border border-[#bce4f6] text-xs font-semibold text-[#128bc0] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                 >
                   <Zap className="w-3.5 h-3.5" />
                   <span>Re-verify / Force Update Presence</span>
@@ -406,7 +406,7 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
               )}
             </div>
           ) : (
-            <div className="relative mx-auto w-full max-w-[280px] h-[280px] rounded-xl bg-[#090b10] border-2 border-[#c5a059]/40 flex flex-col items-center justify-center overflow-hidden shadow-inner">
+            <div className="relative mx-auto w-full max-w-[280px] h-[280px] rounded-2xl bg-[#15232a] border-2 border-[#128bc0]/50 flex flex-col items-center justify-center overflow-hidden shadow-inner">
               {/* Video Element is ALWAYS rendered to prevent null ref binding */}
               <video
                 ref={videoRef}
@@ -419,7 +419,7 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
               {cameraActive ? (
                 <>
                   {/* Animated Optical Laser Line */}
-                  <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_15px_#34d399] animate-bounce z-20 pointer-events-none" />
+                  <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_15px_#22d3ee] animate-bounce z-20 pointer-events-none" />
                   {/* Switch Camera Button */}
                   <button
                     type="button"
@@ -432,10 +432,10 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
                 </>
               ) : (
                 <div className="p-6 text-center space-y-3 z-10">
-                  <div className="w-12 h-12 rounded-lg bg-[#c5a059]/10 border border-[#c5a059]/25 text-[#dfba73] flex items-center justify-center mx-auto">
+                  <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/20 text-[#38bdf8] flex items-center justify-center mx-auto">
                     <QrCode className="w-6 h-6" />
                   </div>
-                  <div className="text-xs font-semibold text-slate-300">
+                  <div className="text-xs font-semibold text-slate-200">
                     {cameraError ? 'Camera Mode Inactive' : 'Initializing camera stream...'}
                   </div>
                   {cameraError && (
@@ -446,7 +446,7 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
                   <button
                     type="button"
                     onClick={() => startCamera()}
-                    className="px-3 py-1 rounded bg-white/[0.06] hover:bg-white/[0.12] text-[11px] text-slate-300 hover:text-white border border-white/10 transition-colors"
+                    className="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[11px] text-slate-200 hover:text-white border border-white/20 transition-colors"
                   >
                     Retry Camera
                   </button>
@@ -455,15 +455,15 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
 
               {/* Viewfinder Target Reticle Frame */}
               <div className="absolute inset-4 pointer-events-none z-10">
-                <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-[#dfba73] rounded-tl-lg" />
-                <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-[#dfba73] rounded-tr-lg" />
-                <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-[#dfba73] rounded-bl-lg" />
-                <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-[#dfba73] rounded-br-lg" />
+                <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-[#38bdf8] rounded-tl-lg" />
+                <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-[#38bdf8] rounded-tr-lg" />
+                <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-[#38bdf8] rounded-bl-lg" />
+                <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-[#38bdf8] rounded-br-lg" />
               </div>
 
               {cameraActive && (
-                <div className="absolute bottom-3 inset-x-3 z-20 bg-black/60 backdrop-blur-md py-1.5 px-3 rounded-full text-[10px] font-bold text-emerald-300 flex items-center justify-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <div className="absolute bottom-3 inset-x-3 z-20 bg-black/60 backdrop-blur-md py-1.5 px-3 rounded-full text-[10px] font-bold text-cyan-300 flex items-center justify-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
                   Align Warden's QR Code inside frame
                 </div>
               )}
@@ -471,20 +471,20 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
           )}
 
           {/* Student Terminal Location Info */}
-          <div className="p-3.5 rounded-lg bg-[#121620] border border-white/[0.06] text-left text-xs space-y-1.5">
-            <div className="flex items-center justify-between text-slate-300">
-              <span className="flex items-center gap-1.5 text-slate-400">
-                <MapPin className="w-3.5 h-3.5 text-[#dfba73]" />
+          <div className="p-3.5 rounded-xl bg-[#fbfbf9] border border-[#dce5dc] text-left text-xs space-y-1.5">
+            <div className="flex items-center justify-between text-[#15232a]">
+              <span className="flex items-center gap-1.5 text-[#586d65]">
+                <MapPin className="w-3.5 h-3.5 text-[#128bc0]" />
                 Hostel Complex:
               </span>
-              <strong className="text-white">{student?.hostel?.name || 'Campus Block'}</strong>
+              <strong className="text-[#15232a]">{student?.hostel?.name || 'Campus Block'}</strong>
             </div>
-            <div className="flex items-center justify-between text-slate-300">
-              <span className="flex items-center gap-1.5 text-slate-400">
-                <Clock className="w-3.5 h-3.5 text-[#dfba73]" />
+            <div className="flex items-center justify-between text-[#15232a]">
+              <span className="flex items-center gap-1.5 text-[#586d65]">
+                <Clock className="w-3.5 h-3.5 text-[#128bc0]" />
                 Resident Roll:
               </span>
-              <strong className="text-white uppercase">{student?.enrollmentNumber || user?.enrollmentNumber || 'CS2026'}</strong>
+              <strong className="text-[#15232a] uppercase">{student?.enrollmentNumber || user?.enrollmentNumber || 'CS2026'}</strong>
             </div>
           </div>
 
@@ -492,16 +492,16 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
           {showManualInput && !scanResult && (
             <form onSubmit={handleManualSubmit} className="space-y-2 text-left animate-fade-in">
               <div className="flex items-center justify-between">
-                <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                <label className="text-[11px] font-semibold text-[#586d65] uppercase tracking-wider">
                   Enter Warden QR Session Code
                 </label>
                 <button
                   type="button"
                   onClick={handleAutofillCode}
-                  className="px-2 py-0.5 rounded-md bg-[#c5a059]/15 text-[#dfba73] hover:bg-[#c5a059]/25 border border-[#c5a059]/30 text-[10.5px] font-semibold flex items-center gap-1 transition-all cursor-pointer shadow-sm active:scale-95"
+                  className="px-2.5 py-1 rounded-full bg-[#e8f1f5] text-[#128bc0] hover:bg-[#d8effa] border border-[#bce4f6] text-[10.5px] font-semibold flex items-center gap-1 transition-all cursor-pointer shadow-sm active:scale-95"
                   title="Autofill active session code"
                 >
-                  <Sparkles className="w-3 h-3 text-[#dfba73]" />
+                  <Sparkles className="w-3 h-3 text-[#128bc0]" />
                   <span>Auto Fill Demo</span>
                 </button>
               </div>
@@ -511,7 +511,7 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
                   placeholder="e.g. ATT-SAY-A-XXXX"
                   value={manualCode}
                   onChange={(e) => setManualCode(e.target.value)}
-                  className="flex-1 px-3 py-2 rounded-lg bg-[#121620] border border-white/10 text-xs text-white placeholder-slate-500 uppercase font-mono focus:outline-none focus:border-[#dfba73]"
+                  className="flex-1 px-3 py-2 rounded-lg bg-[#fbfbf9] border border-[#dce5dc] text-xs text-[#15232a] placeholder-slate-400 uppercase font-mono focus:outline-none focus:border-[#128bc0]"
                   required
                 />
                 <button
@@ -534,26 +534,26 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
                     type="button"
                     disabled={verifying}
                     onClick={() => handleInstantDemoScan(false)}
-                    className="flex-1 py-3 rounded-lg btn-arch-primary text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all"
+                    className="flex-1 py-3 rounded-xl btn-arch-primary text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all"
                   >
-                    <Zap className={`w-4 h-4 text-[#090b10] ${verifying ? 'animate-spin' : ''}`} />
+                    <Zap className={`w-4 h-4 text-white ${verifying ? 'animate-spin' : ''}`} />
                     <span>{verifying ? 'Verifying Scan...' : 'Instant Verify Active QR'}</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-3.5 py-3 rounded-lg bg-[#121620] hover:bg-white/[0.06] text-slate-300 hover:text-white text-xs font-semibold cursor-pointer border border-white/10 flex items-center gap-1"
+                    className="px-3.5 py-3 rounded-xl bg-[#fbfbf9] hover:bg-[#e8f1f5] text-[#15232a] text-xs font-semibold cursor-pointer border border-[#dce5dc] flex items-center gap-1"
                     title="Upload QR Image file"
                   >
-                    <UploadCloud className="w-4 h-4" />
+                    <UploadCloud className="w-4 h-4 text-[#128bc0]" />
                     <span className="hidden sm:inline">Upload</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setShowManualInput(!showManualInput)}
-                    className="px-3.5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold cursor-pointer border border-slate-700"
+                    className="px-3.5 py-3 rounded-xl bg-[#fbfbf9] hover:bg-[#e8f1f5] text-[#15232a] text-xs font-semibold cursor-pointer border border-[#dce5dc]"
                     title="Enter code manually"
                   >
                     {showManualInput ? 'Camera' : 'Code'}
@@ -570,9 +570,9 @@ export default function ScanAttendanceModal({ isOpen, onClose, student, user, on
                     hasScannedRef.current = false;
                     startCamera();
                   }}
-                  className="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold cursor-pointer border border-slate-700 flex items-center justify-center gap-1.5 transition-colors"
+                  className="flex-1 py-3 rounded-xl bg-[#fbfbf9] hover:bg-[#e8f1f5] text-[#15232a] text-xs font-semibold cursor-pointer border border-[#dce5dc] flex items-center justify-center gap-1.5 transition-colors"
                 >
-                  <RefreshCw className="w-3.5 h-3.5" />
+                  <RefreshCw className="w-3.5 h-3.5 text-[#128bc0]" />
                   <span>Scan Again</span>
                 </button>
                 <button

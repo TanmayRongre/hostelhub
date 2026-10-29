@@ -12,15 +12,7 @@ export default function CtaSection() {
         <div ref={ref} className={`cta-banner reveal-scale ${inView ? 'in-view' : ''}`}>
           <h2>
             Modernize Your Institution's{' '}
-            <span
-              style={{
-                background: 'linear-gradient(135deg, #ffffff 0%, #e8d7b3 40%, #c5a059 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                fontStyle: 'italic',
-              }}
-            >
+            <span className="text-[#128bc0] italic font-bold">
               Residential Operations
             </span>
           </h2>

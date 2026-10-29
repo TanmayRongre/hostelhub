@@ -66,11 +66,11 @@ export default function Footer() {
           <div>
             <Link to="/" className="footer-brand-logo">
               <div className="footer-logo-icon">
-                <Building2 className="w-4 h-4 text-[#dfba73]" />
+                <Building2 className="w-4 h-4 text-[#128bc0]" />
               </div>
               <div>
                 <div className="footer-brand-name">
-                  Hostel<span className="text-[#dfba73]">Hub</span>
+                  Hostel<span className="text-[#128bc0]">Hub</span>
                 </div>
                 <span className="footer-brand-tag">Institutional Residence System</span>
               </div>
@@ -133,7 +133,7 @@ export default function Footer() {
                     to={l.to}
                     onClick={(e) => l.hash && handleNavScroll(e, l.hash)}
                   >
-                    <ChevronRight className="w-3.5 h-3.5 text-[#dfba73]" />
+                    <ChevronRight className="w-3.5 h-3.5 text-[#128bc0]" />
                     <span>{l.label}</span>
                   </Link>
                 </li>
@@ -152,14 +152,14 @@ export default function Footer() {
                 'Night QR Attendance Verification',
                 'Institutional Fee Reconciliation',
               ].map((feat) => (
-                <li key={feat} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '12.5px', color: '#94a3b8' }}>
+                <li key={feat} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '12.5px', color: '#586d65' }}>
                   <div style={{
-                    width: 14,
-                    height: 14,
-                    borderRadius: 3,
-                    background: 'rgba(197, 160, 89, 0.15)',
-                    border: '1px solid rgba(197, 160, 89, 0.3)',
-                    color: '#dfba73',
+                    width: 16,
+                    height: 16,
+                    borderRadius: 9999,
+                    background: '#e8f1f5',
+                    border: '1px solid #bce4f6',
+                    color: '#128bc0',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -229,18 +229,18 @@ export default function Footer() {
 
       {/* ── INTERACTIVE POLICY & RULES MODAL ── */}
       {activeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in font-sans">
-          <div className="w-full max-w-lg p-6 rounded-xl bg-[#0e1219] border border-white/[0.1] shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in font-sans">
+          <div className="w-full max-w-lg p-6 rounded-2xl bg-white border border-[#d6e0d7] shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[#d6e0d7] pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-md bg-[#c5a059]/15 text-[#dfba73] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-[#e8f1f5] text-[#128bc0] border border-[#bce4f6] flex items-center justify-center">
                   <FileText className="w-4 h-4" />
                 </div>
-                <h3 className="font-serif text-base font-bold text-white">{activeModal}</h3>
+                <h3 className="font-serif text-base font-bold text-[#15232a]">{activeModal}</h3>
               </div>
               <button
                 onClick={() => setActiveModal(null)}
-                className="w-7 h-7 rounded-md bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 hover:text-white flex items-center justify-center cursor-pointer transition-colors"
+                className="w-7 h-7 rounded-full bg-[#f5f6f0] hover:bg-[#eef1ea] text-[#586d65] hover:text-[#15232a] flex items-center justify-center cursor-pointer transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -248,8 +248,8 @@ export default function Footer() {
 
             <div className="space-y-2.5 py-2">
               {POLICY_CONTENT[activeModal]?.map((rule, idx) => (
-                <div key={idx} className="p-3 rounded-lg bg-[#141824] border border-white/[0.06] flex items-start gap-3 text-xs text-slate-300 leading-relaxed">
-                  <span className="text-[#dfba73] font-bold mt-0.5">•</span>
+                <div key={idx} className="p-3 rounded-xl bg-[#fbfbf9] border border-[#dce5dc] flex items-start gap-3 text-xs text-[#586d65] leading-relaxed">
+                  <span className="text-[#128bc0] font-bold mt-0.5">•</span>
                   <span>{rule}</span>
                 </div>
               ))}
@@ -258,7 +258,7 @@ export default function Footer() {
             <div className="pt-2">
               <button
                 onClick={() => setActiveModal(null)}
-                className="w-full py-2.5 rounded-lg bg-[#c5a059] hover:bg-[#dfba73] text-[#090b10] text-xs font-semibold shadow-sm transition-all cursor-pointer"
+                className="w-full py-2.5 rounded-full bg-[#152c36] hover:bg-[#128bc0] text-white text-xs font-semibold shadow-sm transition-all cursor-pointer"
               >
                 Acknowledge &amp; Dismiss
               </button>

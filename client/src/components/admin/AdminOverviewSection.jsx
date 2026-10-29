@@ -71,24 +71,24 @@ export default function AdminOverviewSection({ stats }) {
         {kpiCards.map((kpi, idx) => (
           <div
             key={idx}
-            className="p-5 rounded-xl bg-[#0e1219] hover:bg-[#121620] border border-white/[0.08] hover:border-[#c5a059]/40 shadow-xl flex flex-col justify-between transition-all group"
+            className="p-5 rounded-2xl bg-white hover:bg-[#fbfbf9] border border-[#d6e0d7] hover:border-[#128bc0]/40 shadow-[0_4px_20px_rgba(21,35,42,0.04)] flex flex-col justify-between transition-all group"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">{kpi.title}</span>
-              <div className="p-2.5 rounded-lg bg-[#c5a059]/10 border border-[#c5a059]/30 text-[#dfba73] group-hover:scale-105 transition-transform">
+              <span className="text-[11px] font-bold text-[#586d65] uppercase tracking-wider">{kpi.title}</span>
+              <div className="p-2.5 rounded-xl bg-[#e8f1f5] border border-[#bce4f6] text-[#128bc0] group-hover:scale-105 transition-transform">
                 {kpi.icon}
               </div>
             </div>
 
             <div className="my-3">
-              <div className="text-3xl font-bold font-serif text-white tracking-tight">{kpi.value}</div>
-              <p className="text-[11px] text-slate-400 mt-1">{kpi.subtitle}</p>
+              <div className="text-3xl font-bold font-serif text-[#15232a] tracking-tight">{kpi.value}</div>
+              <p className="text-[11px] text-[#586d65] mt-1">{kpi.subtitle}</p>
             </div>
 
-            <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between text-[11px] text-slate-400">
+            <div className="pt-2 border-t border-[#dce5dc] flex items-center justify-between text-[11px] text-[#586d65]">
               <span>Metric Status</span>
-              <span className="text-emerald-400 font-semibold flex items-center gap-1.5 font-mono text-[10px]">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-emerald-700 font-semibold flex items-center gap-1.5 font-mono text-[10px]">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Live Telemetry
               </span>
             </div>
